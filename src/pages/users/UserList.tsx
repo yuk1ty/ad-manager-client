@@ -11,7 +11,7 @@ export function UserList() {
     },
     {
       label: "ユーザー名",
-      prop: "user_name",
+      prop: "name",
     },
     {
       label: "メールアドレス",
@@ -19,7 +19,7 @@ export function UserList() {
     },
     {
       label: "代理店",
-      prop: "agency",
+      prop: "agency.name",
     },
     {
       label: "オペレーション",
