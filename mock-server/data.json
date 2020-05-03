@@ -1,0 +1,19 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "user_name": "User A",
+      "email_address": "aaa@aaa.com",
+      "agency": "CyberAgent"
+    },
+    {
+      "id": 2,
+      "user_name": "User B",
+      "email_address": "bbb@bbb.com",
+      "agency": "CyberAgent"
+    },
+    {
+      "id": 3
+    }
+  ]
+}
