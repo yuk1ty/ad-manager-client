@@ -1,14 +1,16 @@
-import React, { useState, SyntheticEvent, ChangeEvent } from "react";
+import React, { useState, SyntheticEvent } from "react";
 import { Header } from "../../../components/header/Header";
 import { StandardLayout } from "../../../components/context/StandardLayout";
 import { Button, TextField } from "@material-ui/core";
 import axios from "axios";
+import { Redirect, useHistory } from "react-router-dom";
 
 export function UserRegister() {
   const [name, setName] = useState("");
   const [emailAddress, setAddress] = useState("");
   const [rawPassword, setRawPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const history = useHistory();
 
   async function onSubmit(e: SyntheticEvent) {
     e.preventDefault();
@@ -22,8 +24,9 @@ export function UserRegister() {
         name: "CyberAgent",
       },
     };
-    console.log(user);
-    await axios.post("http://localhost:8080/users", user);
+    await axios.post("http://localhost:8080/users", user).then((res) => {
+      history.push("/users/list");
+    });
   }
 
   return (
