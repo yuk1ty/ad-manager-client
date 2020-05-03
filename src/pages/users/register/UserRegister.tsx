@@ -1,76 +1,68 @@
-import React, {
-  useState,
-  useCallback,
-  SyntheticEvent,
-  ChangeEvent,
-} from "react";
+import React, { useState, SyntheticEvent, ChangeEvent } from "react";
 import { Header } from "../../../components/header/Header";
 import { StandardLayout } from "../../../components/context/StandardLayout";
-import { FormControl, InputLabel, Input, Button } from "@material-ui/core";
+import { Button, TextField } from "@material-ui/core";
 import axios from "axios";
 
-interface UserFormInput {
-  name: string;
-  emailAddress: string;
-  rawPassword: string;
-  confirmPassword: string;
-}
-
 export function UserRegister() {
-  const [user, setUser] = useState<UserFormInput>({
-    name: "",
-    emailAddress: "",
-    rawPassword: "",
-    confirmPassword: "",
-  });
+  const [name, setName] = useState("");
+  const [emailAddress, setAddress] = useState("");
+  const [rawPassword, setRawPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleInputChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) =>
-      setUser((user) => ({ ...user, [e.target.name]: e.target.value })),
-    []
-  );
-
-  async function handleSubmit(e: SyntheticEvent) {
+  async function onSubmit(e: SyntheticEvent) {
     e.preventDefault();
-    await axios.post("http://localhost:8080/users", { user });
+    const user = {
+      name: name,
+      emailAddress: emailAddress,
+      rawPassword: rawPassword,
+      confirmPassword: confirmPassword,
+      agency: {
+        id: 1,
+        name: "CyberAgent",
+      },
+    };
+    console.log(user);
+    await axios.post("http://localhost:8080/users", user);
   }
 
   return (
     <>
       <Header />
       <StandardLayout title="ユーザー登録">
-        <form onSubmit={handleSubmit}>
-          <Input
-            type="text"
-            key="name"
+        <form onSubmit={onSubmit}>
+          <TextField
+            label="ユーザー名"
             name="name"
             fullWidth
-            value={user.name}
-            onChange={handleInputChange}
+            value={name}
+            variant="filled"
+            size="small"
+            onChange={(e) => setName(e.target.value)}
           />
-          <Input
-            type="text"
-            key="emailAddress"
-            name="emailAddress"
+          <TextField
+            label="メールアドレス"
+            value={emailAddress}
             fullWidth
-            value={user.emailAddress}
-            onChange={handleInputChange}
+            variant="filled"
+            size="small"
+            onChange={(e) => setAddress(e.target.value)}
           />
-          <Input
-            type="text"
-            key="rawPassword"
-            name="rawPassword"
+          <TextField
+            label="登録用パスワード"
+            value={rawPassword}
             fullWidth
-            value={user.rawPassword}
-            onChange={handleInputChange}
+            variant="filled"
+            size="small"
+            onChange={(e) => setRawPassword(e.target.value)}
           />
-          <Input
-            type="text"
-            key="confirmPassword"
-            name="confirmPassword"
+          <TextField
+            label="確認用パスワード"
+            value={confirmPassword}
             fullWidth
-            value={user.confirmPassword}
-            onChange={handleInputChange}
+            variant="filled"
+            size="small"
+            onChange={(e) => setConfirmPassword(e.target.value)}
           />
           <Button type="submit">ユーザーを新規登録する</Button>
         </form>

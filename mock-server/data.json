@@ -4,6 +4,8 @@
       "id": 1,
       "name": "User A",
       "emailAddress": "aaa@aaa.com",
+      "rawPassword": "a",
+      "confirmPassword": "a",
       "agency": {
         "id": 1,
         "name": "CyberAgent"
@@ -13,6 +15,8 @@
       "id": 2,
       "name": "User B",
       "emailAddress": "bbb@bbb.com",
+      "rawPassword": "a",
+      "confirmPassword": "a",
       "agency": {
         "id": 2,
         "name": "CyberAgent"
