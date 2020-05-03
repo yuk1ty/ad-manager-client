@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Table, Button } from "element-react";
 import { Header } from "../../components/header/Header";
 import { StandardLayout } from "../../components/context/StandardLayout";
+import axios from "axios";
 
 export function UserList() {
   const [tableColumn] = useState([
@@ -37,23 +38,15 @@ export function UserList() {
     },
   ]);
 
-  const [tableData] = useState([
-    {
-      user_name: "AAA",
-      email_address: "aaa@aaa.com",
-      agency: "CyberAgent",
-    },
-    {
-      user_name: "BBB",
-      email_address: "bbb@bbb.com",
-      agency: "電通",
-    },
-    {
-      user_name: "CCC",
-      email_address: "ccc@ccc.com",
-      agency: "博報堂",
-    },
-  ]);
+  const [tableData, setData] = useState();
+
+  useEffect(() => {
+    const fetchTableData = async () => {
+      const result = await axios.get("http://localhost:8080/users");
+      setData(result.data);
+    };
+    fetchTableData();
+  }, []);
 
   return (
     <>
