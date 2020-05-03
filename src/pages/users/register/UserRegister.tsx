@@ -1,39 +1,79 @@
-import React from "react";
+import React, {
+  useState,
+  useCallback,
+  SyntheticEvent,
+  ChangeEvent,
+} from "react";
 import { Header } from "../../../components/header/Header";
 import { StandardLayout } from "../../../components/context/StandardLayout";
-import { Form, Input, Button, Radio } from "element-react";
+import { FormControl, InputLabel, Input, Button } from "@material-ui/core";
+import axios from "axios";
+
+interface UserFormInput {
+  name: string;
+  emailAddress: string;
+  rawPassword: string;
+  confirmPassword: string;
+}
 
 export function UserRegister() {
+  const [user, setUser] = useState<UserFormInput>({
+    name: "",
+    emailAddress: "",
+    rawPassword: "",
+    confirmPassword: "",
+  });
+
+  const handleInputChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) =>
+      setUser((user) => ({ ...user, [e.target.name]: e.target.value })),
+    []
+  );
+
+  async function handleSubmit(e: SyntheticEvent) {
+    e.preventDefault();
+    await axios.post("http://localhost:8080/users", { user });
+  }
+
   return (
     <>
       <Header />
       <StandardLayout title="ユーザー登録">
-        <Form className="en-US" labelWidth="120">
-          <Form.Item label="ユーザー名">
-            <Input />
-          </Form.Item>
-          <Form.Item label="メールアドレス">
-            <Input />
-          </Form.Item>
-          <Form.Item label="登録用パスワード">
-            <Input type="password" />
-          </Form.Item>
-          <Form.Item label="パスワード確認">
-            <Input type="password" />
-          </Form.Item>
-          <Form.Item label="ユーザー権限">
-            <Radio.Group>
-              <Radio value="管理者"></Radio>
-              <Radio value="メンバー"></Radio>
-            </Radio.Group>
-          </Form.Item>
-          <Form.Item label="所属代理店">
-            <Input />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary">ユーザーを新規作成する</Button>
-          </Form.Item>
-        </Form>
+        <form onSubmit={handleSubmit}>
+          <Input
+            type="text"
+            key="name"
+            name="name"
+            fullWidth
+            value={user.name}
+            onChange={handleInputChange}
+          />
+          <Input
+            type="text"
+            key="emailAddress"
+            name="emailAddress"
+            fullWidth
+            value={user.emailAddress}
+            onChange={handleInputChange}
+          />
+          <Input
+            type="text"
+            key="rawPassword"
+            name="rawPassword"
+            fullWidth
+            value={user.rawPassword}
+            onChange={handleInputChange}
+          />
+          <Input
+            type="text"
+            key="confirmPassword"
+            name="confirmPassword"
+            fullWidth
+            value={user.confirmPassword}
+            onChange={handleInputChange}
+          />
+          <Button type="submit">ユーザーを新規登録する</Button>
+        </form>
       </StandardLayout>
     </>
   );

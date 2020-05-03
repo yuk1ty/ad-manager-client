@@ -1,49 +1,31 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button } from "element-react";
 import { Header } from "../../components/header/Header";
 import { StandardLayout } from "../../components/context/StandardLayout";
 import axios from "axios";
+import {
+  Paper,
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+} from "@material-ui/core";
+
+interface UserData {
+  id: number;
+  name: string;
+  emailAddress: string;
+  agency: { id: number; name: string };
+}
 
 export function UserList() {
-  const [tableColumn] = useState([
-    {
-      type: "index",
-    },
-    {
-      label: "ユーザー名",
-      prop: "name",
-    },
-    {
-      label: "メールアドレス",
-      prop: "email_address",
-    },
-    {
-      label: "代理店",
-      prop: "agency.name",
-    },
-    {
-      label: "オペレーション",
-      render: function () {
-        return (
-          <span>
-            <Button plain={true} type="info" size="small">
-              編集
-            </Button>
-            <Button type="danger" size="small">
-              削除
-            </Button>
-          </span>
-        );
-      },
-    },
-  ]);
-
-  const [tableData, setData] = useState();
+  const [users, setUsers] = useState<UserData[]>([]);
 
   useEffect(() => {
     const fetchTableData = async () => {
       const result = await axios.get("http://localhost:8080/users");
-      setData(result.data);
+      setUsers(result.data);
     };
     fetchTableData();
   }, []);
@@ -52,12 +34,28 @@ export function UserList() {
     <>
       <Header />
       <StandardLayout title="ユーザー一覧">
-        <Table
-          columns={tableColumn}
-          data={tableData}
-          border={true}
-          highlightCurrentRow={true}
-        />
+        <TableContainer component={Paper}>
+          <Table aria-label="table">
+            <TableHead>
+              <TableRow>
+                <TableCell>#</TableCell>
+                <TableCell>ユーザー名</TableCell>
+                <TableCell>メールアドレス</TableCell>
+                <TableCell>代理店</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {users.map((user) => (
+                <TableRow key={user.id}>
+                  <TableCell>{user.id}</TableCell>
+                  <TableCell>{user.name}</TableCell>
+                  <TableCell>{user.emailAddress}</TableCell>
+                  <TableCell>{user.agency.name}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </StandardLayout>
     </>
   );

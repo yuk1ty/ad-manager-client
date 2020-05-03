@@ -3,7 +3,7 @@
     {
       "id": 1,
       "name": "User A",
-      "email_address": "aaa@aaa.com",
+      "emailAddress": "aaa@aaa.com",
       "agency": {
         "id": 1,
         "name": "CyberAgent"
@@ -12,7 +12,7 @@
     {
       "id": 2,
       "name": "User B",
-      "email_address": "bbb@bbb.com",
+      "emailAddress": "bbb@bbb.com",
       "agency": {
         "id": 2,
         "name": "CyberAgent"

@@ -5,27 +5,43 @@ import { Dashboard } from "./pages/dashboard/Dashboard";
 import { Login } from "./pages/login/Login";
 import { UserList } from "./pages/users/UserList";
 import { UserRegister } from "./pages/users/register/UserRegister";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 
 function App() {
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+
+  const theme = React.useMemo(
+    () =>
+      createMuiTheme({
+        palette: {
+          type: "light", // TODO あとで変えたい
+        },
+      }),
+    [prefersDarkMode]
+  );
+
   return (
-    <Router>
-      <div className="App">
-        <Switch>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/users/list">
-            <UserList />
-          </Route>
-          <Route path="/users/register">
-            <UserRegister />
-          </Route>
-          <Route path="/">
-            <Dashboard />
-          </Route>
-        </Switch>
-      </div>
-    </Router>
+    <ThemeProvider theme={theme}>
+      <Router>
+        <div className="App">
+          <Switch>
+            <Route path="/login">
+              <Login />
+            </Route>
+            <Route path="/users/list">
+              <UserList />
+            </Route>
+            <Route path="/users/register">
+              <UserRegister />
+            </Route>
+            <Route path="/">
+              <Dashboard />
+            </Route>
+          </Switch>
+        </div>
+      </Router>
+    </ThemeProvider>
   );
 }
 
