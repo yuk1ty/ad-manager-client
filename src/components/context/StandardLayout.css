@@ -1,0 +1,11 @@
+.standard {
+  margin: 0 auto;
+  margin-top: 60px;
+  width: 960px;
+}
+
+@media screen and (max-width: 600px) {
+  .standard {
+    width: 100%;
+  }
+}
