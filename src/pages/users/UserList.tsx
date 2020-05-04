@@ -11,6 +11,8 @@ import {
   TableCell,
   TableBody,
   Button,
+  IconButton,
+  Tooltip,
 } from "@material-ui/core";
 import { Edit, Delete } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
@@ -75,12 +77,22 @@ export function UserList() {
                     {user.role === 1 ? "管理者" : "メンバー"}
                   </TableCell>
                   <TableCell>
-                    <Button onClick={(e) => transitToEditPage(e, user)}>
-                      <Edit />
-                    </Button>
-                    <Button onClick={(e) => removeUser(e, user)}>
-                      <Delete />
-                    </Button>
+                    <Tooltip title="編集">
+                      <IconButton
+                        onClick={(e) => transitToEditPage(e, user)}
+                        aria-label="edit"
+                      >
+                        <Edit />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="削除">
+                      <IconButton
+                        onClick={(e) => removeUser(e, user)}
+                        aria-label="delete"
+                      >
+                        <Delete />
+                      </IconButton>
+                    </Tooltip>
                   </TableCell>
                 </TableRow>
               ))}

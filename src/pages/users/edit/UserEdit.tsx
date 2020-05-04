@@ -147,7 +147,7 @@ export function UserEdit() {
               color="primary"
               className={classes.submitButton}
             >
-              ユーザーを編集する
+              ユーザーを更新する
             </Button>
           </form>
         </Paper>
