@@ -13,6 +13,7 @@ import {
   Button,
 } from "@material-ui/core";
 import { Edit, Delete } from "@material-ui/icons";
+import { useHistory } from "react-router-dom";
 
 interface UserData {
   id: number;
@@ -23,6 +24,7 @@ interface UserData {
 
 export function UserList() {
   const [users, setUsers] = useState<UserData[]>([]);
+  const history = useHistory();
 
   useEffect(() => {
     const fetchTableData = async () => {
@@ -31,6 +33,11 @@ export function UserList() {
     };
     fetchTableData();
   }, []);
+
+  function transitToEditPage(e: SyntheticEvent, user: UserData) {
+    e.preventDefault();
+    history.push(`/users/${user.id}/edit`);
+  }
 
   async function removeUser(e: SyntheticEvent, user: UserData) {
     e.preventDefault();
@@ -63,7 +70,7 @@ export function UserList() {
                   <TableCell>{user.emailAddress}</TableCell>
                   <TableCell>{user.agency.name}</TableCell>
                   <TableCell>
-                    <Button>
+                    <Button onClick={(e) => transitToEditPage(e, user)}>
                       <Edit />
                     </Button>
                     <Button onClick={(e) => removeUser(e, user)}>

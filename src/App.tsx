@@ -7,6 +7,7 @@ import { UserList } from "./pages/users/UserList";
 import { UserRegister } from "./pages/users/register/UserRegister";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import { UserEdit } from "./pages/users/edit/UserEdit";
 
 function App() {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -35,6 +36,7 @@ function App() {
             <Route path="/users/register">
               <UserRegister />
             </Route>
+            <Route path="/users/:id/edit" component={UserEdit} />
             <Route path="/">
               <Dashboard />
             </Route>
