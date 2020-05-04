@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, SyntheticEvent } from "react";
 import { Header } from "../../components/header/Header";
 import { StandardLayout } from "../../components/context/StandardLayout";
 import axios from "axios";
@@ -10,7 +10,9 @@ import {
   TableRow,
   TableCell,
   TableBody,
+  Button,
 } from "@material-ui/core";
+import { Edit, Delete } from "@material-ui/icons";
 
 interface UserData {
   id: number;
@@ -30,6 +32,14 @@ export function UserList() {
     fetchTableData();
   }, []);
 
+  async function removeUser(e: SyntheticEvent, user: UserData) {
+    e.preventDefault();
+    await axios.delete(`http://localhost:8080/users/${user.id}`).then((res) => {
+      const result = users.filter((item) => user.id !== item.id);
+      setUsers(result);
+    });
+  }
+
   return (
     <>
       <Header />
@@ -42,6 +52,7 @@ export function UserList() {
                 <TableCell>ユーザー名</TableCell>
                 <TableCell>メールアドレス</TableCell>
                 <TableCell>代理店</TableCell>
+                <TableCell></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -51,6 +62,14 @@ export function UserList() {
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.emailAddress}</TableCell>
                   <TableCell>{user.agency.name}</TableCell>
+                  <TableCell>
+                    <Button>
+                      <Edit />
+                    </Button>
+                    <Button onClick={(e) => removeUser(e, user)}>
+                      <Delete />
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

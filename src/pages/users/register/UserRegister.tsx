@@ -3,7 +3,7 @@ import { Header } from "../../../components/header/Header";
 import { StandardLayout } from "../../../components/context/StandardLayout";
 import { Button, TextField } from "@material-ui/core";
 import axios from "axios";
-import { Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 export function UserRegister() {
   const [name, setName] = useState("");
