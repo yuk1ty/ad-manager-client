@@ -8,6 +8,8 @@ import { UserRegister } from "./pages/users/register/UserRegister";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { UserEdit } from "./pages/users/edit/UserEdit";
+import { AgencyList } from "./pages/agencies/list/AgencyList";
+import { AgencyEdit } from "./pages/agencies/edit/AgencyEdit";
 
 function App() {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -37,6 +39,10 @@ function App() {
               <UserRegister />
             </Route>
             <Route path="/users/:id/edit" component={UserEdit} />
+            <Route path="/agencies/list">
+              <AgencyList />
+            </Route>
+            <Route path="/agencies/:id/edit" component={AgencyEdit} />
             <Route path="/">
               <Dashboard />
             </Route>

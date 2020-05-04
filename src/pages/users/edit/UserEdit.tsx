@@ -60,7 +60,7 @@ export function UserEdit() {
         .data;
       setName(result.name);
       setAddress(result.emailAddress);
-      setSelectedAgency(`${result.agency.id}`); // TODO なんか動かない
+      setSelectedAgency(result.agency.id); // TODO
       setRole(result.role);
     };
     fetchUserData();
@@ -147,7 +147,7 @@ export function UserEdit() {
               color="primary"
               className={classes.submitButton}
             >
-              ユーザーを新規登録する
+              ユーザーを編集する
             </Button>
           </form>
         </Paper>
