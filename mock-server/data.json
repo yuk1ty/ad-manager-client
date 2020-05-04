@@ -18,9 +18,34 @@
       "rawPassword": "a",
       "confirmPassword": "a",
       "agency": {
-        "id": 2,
+        "id": 1,
         "name": "CyberAgent"
       }
+    },
+    {
+      "name": "user1",
+      "emailAddress": "toyoda_yuki@cyberagent.co.jp",
+      "rawPassword": "password",
+      "confirmPassword": "password",
+      "agency": {
+        "id": 1,
+        "name": "CyberAgent"
+      },
+      "id": 3
+    }
+  ],
+  "agencies": [
+    {
+      "id": 1,
+      "name": "CyberAgent"
+    },
+    {
+      "id": 2,
+      "name": "電通"
+    },
+    {
+      "id": 3,
+      "name": "博報堂"
     }
   ]
 }
