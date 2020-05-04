@@ -20,6 +20,7 @@ interface UserData {
   name: string;
   emailAddress: string;
   agency: { id: number; name: string };
+  role: number;
 }
 
 export function UserList() {
@@ -59,6 +60,7 @@ export function UserList() {
                 <TableCell>ユーザー名</TableCell>
                 <TableCell>メールアドレス</TableCell>
                 <TableCell>代理店</TableCell>
+                <TableCell>権限</TableCell>
                 <TableCell></TableCell>
               </TableRow>
             </TableHead>
@@ -69,6 +71,9 @@ export function UserList() {
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.emailAddress}</TableCell>
                   <TableCell>{user.agency.name}</TableCell>
+                  <TableCell>
+                    {user.role === 1 ? "管理者" : "メンバー"}
+                  </TableCell>
                   <TableCell>
                     <Button onClick={(e) => transitToEditPage(e, user)}>
                       <Edit />

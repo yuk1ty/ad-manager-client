@@ -1,4 +1,4 @@
-import React, { useState, SyntheticEvent, useEffect, ChangeEvent } from "react";
+import React, { useState, SyntheticEvent, useEffect } from "react";
 import "./UserRegister.css";
 import { Header } from "../../../components/header/Header";
 import { StandardLayout } from "../../../components/context/StandardLayout";
@@ -10,6 +10,10 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  FormLabel,
 } from "@material-ui/core";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
@@ -29,6 +33,9 @@ const useStyles = makeStyles((theme: Theme) =>
       "& .MuiSelect-root": {
         margin: theme.spacing(1, 0, 1, 0),
       },
+      "& .MuiFormControl-root": {
+        margin: theme.spacing(1, 0, 1, 0),
+      },
     },
     submitButton: {
       margin: theme.spacing(2, 0, 1, 0),
@@ -43,6 +50,7 @@ export function UserRegister() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [selectedAgency, setSelectedAgency] = useState<unknown>();
   const [agencies, setAgencies] = useState<AgencyData[]>([]);
+  const [role, setRole] = useState(2);
 
   const history = useHistory();
   const classes = useStyles();
@@ -65,7 +73,8 @@ export function UserRegister() {
       emailAddress: emailAddress,
       rawPassword: rawPassword,
       confirmPassword: confirmPassword,
-      agency: targetAgency,
+      agency: targetAgency, // TODO どこかで ID に変えておく
+      role: role,
     };
     await axios.post("http://localhost:8080/users", user).then((res) => {
       history.push("/users/list");
@@ -119,6 +128,25 @@ export function UserRegister() {
                   <MenuItem value={agency.id}>{agency.name}</MenuItem>
                 ))}
               </Select>
+            </FormControl>
+            <FormControl fullWidth>
+              <FormLabel component="legend">ユーザー権限</FormLabel>
+              <RadioGroup
+                aria-label="ユーザー権限"
+                value={role}
+                onChange={(e) => setRole(+(e.target as HTMLInputElement).value)}
+              >
+                <FormControlLabel
+                  value={1}
+                  control={<Radio />}
+                  label="管理者"
+                />
+                <FormControlLabel
+                  value={2}
+                  control={<Radio />}
+                  label="一般ユーザー"
+                />
+              </RadioGroup>
             </FormControl>
             <Button
               type="submit"

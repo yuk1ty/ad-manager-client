@@ -9,7 +9,8 @@
       "agency": {
         "id": 1,
         "name": "CyberAgent"
-      }
+      },
+      "role": 1
     },
     {
       "id": 2,
@@ -20,7 +21,8 @@
       "agency": {
         "id": 1,
         "name": "CyberAgent"
-      }
+      },
+      "role": 2
     },
     {
       "name": "user1",
@@ -31,6 +33,7 @@
         "id": 1,
         "name": "CyberAgent"
       },
+      "role": 2,
       "id": 3
     }
   ],
