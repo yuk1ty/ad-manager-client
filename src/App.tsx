@@ -10,6 +10,7 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { UserEdit } from "./pages/users/edit/UserEdit";
 import { AgencyList } from "./pages/agencies/list/AgencyList";
 import { AgencyEdit } from "./pages/agencies/edit/AgencyEdit";
+import { AgencyRegister } from "./pages/agencies/register/AgencyRegister";
 
 function App() {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -41,6 +42,9 @@ function App() {
             <Route path="/users/:id/edit" component={UserEdit} />
             <Route path="/agencies/list">
               <AgencyList />
+            </Route>
+            <Route path="/agencies/register">
+              <AgencyRegister />
             </Route>
             <Route path="/agencies/:id/edit" component={AgencyEdit} />
             <Route path="/">
