@@ -12,16 +12,32 @@ import {
   TableRow,
   TableCell,
   TableBody,
+  makeStyles,
+  Theme,
+  createStyles,
+  Tooltip,
+  Fab,
 } from "@material-ui/core";
-import { Edit, Delete } from "@material-ui/icons";
+import { Edit, Delete, Add } from "@material-ui/icons";
 
 interface AgencyTableData {
   id: number;
   name: string;
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    absolute: {
+      position: "absolute",
+      bottom: theme.spacing(2),
+      right: theme.spacing(3),
+    },
+  })
+);
+
 export function AgencyList() {
   const [agencies, setAgencies] = useState<AgencyTableData[]>([]);
+  const classes = useStyles();
   const history = useHistory();
 
   useEffect(() => {
@@ -31,6 +47,10 @@ export function AgencyList() {
     };
     fetchAgencyData();
   }, []);
+
+  function transitToRegisterPage() {
+    history.push(`/agencies/register`);
+  }
 
   function transitToEditPage(e: SyntheticEvent, agency: AgencyTableData) {
     e.preventDefault();
@@ -51,6 +71,15 @@ export function AgencyList() {
     <>
       <Header />
       <StandardLayout title="代理店一覧">
+        <Tooltip title="Add" aria-label="add">
+          <Fab
+            color="primary"
+            className={classes.absolute}
+            onClick={() => transitToRegisterPage()}
+          >
+            <Add />
+          </Fab>
+        </Tooltip>
         <TableContainer component={Paper}>
           <Table aria-label="table">
             <TableHead>

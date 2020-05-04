@@ -10,11 +10,14 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  Button,
   IconButton,
   Tooltip,
+  makeStyles,
+  Theme,
+  createStyles,
+  Fab,
 } from "@material-ui/core";
-import { Edit, Delete } from "@material-ui/icons";
+import { Add, Edit, Delete } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
 
 interface UserData {
@@ -25,8 +28,19 @@ interface UserData {
   role: number;
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    absolute: {
+      position: "absolute",
+      bottom: theme.spacing(2),
+      right: theme.spacing(3),
+    },
+  })
+);
+
 export function UserList() {
   const [users, setUsers] = useState<UserData[]>([]);
+  const classes = useStyles();
   const history = useHistory();
 
   useEffect(() => {
@@ -36,6 +50,10 @@ export function UserList() {
     };
     fetchTableData();
   }, []);
+
+  function transitToRegisterPage() {
+    history.push(`/users/register`);
+  }
 
   function transitToEditPage(e: SyntheticEvent, user: UserData) {
     e.preventDefault();
@@ -54,6 +72,15 @@ export function UserList() {
     <>
       <Header />
       <StandardLayout title="ユーザー一覧">
+        <Tooltip title="Add" aria-label="add">
+          <Fab
+            color="primary"
+            className={classes.absolute}
+            onClick={() => transitToRegisterPage()}
+          >
+            <Add />
+          </Fab>
+        </Tooltip>
         <TableContainer component={Paper}>
           <Table aria-label="table">
             <TableHead>

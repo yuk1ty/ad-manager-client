@@ -23,18 +23,6 @@
         "name": "CyberAgent"
       },
       "role": 2
-    },
-    {
-      "name": "user1",
-      "emailAddress": "toyoda_yuki@cyberagent.co.jp",
-      "rawPassword": "password",
-      "confirmPassword": "password",
-      "agency": {
-        "id": 1,
-        "name": "CyberAgent"
-      },
-      "role": 2,
-      "id": 3
     }
   ],
   "agencies": [
