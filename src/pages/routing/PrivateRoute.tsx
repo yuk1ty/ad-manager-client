@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { Redirect, Route } from "react-router-dom";
-import { useCookies } from "react-cookie";
+import { SessionRepository } from "../../context/session";
 
 interface PrivateRouteProps {
   path: string;
@@ -8,9 +8,9 @@ interface PrivateRouteProps {
 }
 
 export const PrivateRoute: FunctionComponent<PrivateRouteProps> = (props) => {
-  const [cookies] = useCookies([""]);
+  const repository = SessionRepository();
 
-  const isAuth = cookies["x-adm-session"] !== undefined;
+  const isAuth = repository.isAuthorized();
 
   return isAuth ? (
     <Route path={props.path}>{props.children}</Route>

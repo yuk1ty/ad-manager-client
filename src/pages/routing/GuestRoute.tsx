@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { Redirect, Route } from "react-router-dom";
-import { useCookies } from "react-cookie";
+import { SessionRepository } from "../../context/session";
 
 interface GuestRouteProps {
   path: string;
@@ -8,9 +8,9 @@ interface GuestRouteProps {
 }
 
 export const GuestRoute: FunctionComponent<GuestRouteProps> = (props) => {
-  const [cookies] = useCookies([""]);
+  const repository = SessionRepository();
 
-  const isAuth = cookies["x-adm-session"] !== undefined;
+  const isAuth = repository.isAuthorized();
 
   return isAuth ? (
     <Redirect to="/" />
