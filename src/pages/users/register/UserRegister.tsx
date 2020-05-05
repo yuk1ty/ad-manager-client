@@ -15,10 +15,11 @@ import {
   Radio,
   FormLabel,
 } from "@material-ui/core";
-import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { AgencyData } from "../../../context/types";
+import { useAxios } from "../../../context/axios";
+import { SessionRepository } from "../../../context/session";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -47,17 +48,20 @@ export function UserRegister() {
   const [selectedAgency, setSelectedAgency] = useState<unknown>();
   const [agencies, setAgencies] = useState<AgencyData[]>([]);
   const [role, setRole] = useState(2);
+  const repository = SessionRepository();
+  const session = repository.session();
+  const axios = useAxios;
 
   const history = useHistory();
   const classes = useStyles();
 
   useEffect(() => {
     const fetchAgencyData = async () => {
-      const result = await axios.get("http://localhost:8080/agencies");
+      const result = await axios(session).get("/agencies");
       setAgencies(result.data);
     };
     fetchAgencyData();
-  }, []);
+  }, [axios, session]);
 
   async function onSubmit(e: SyntheticEvent) {
     e.preventDefault();
@@ -72,9 +76,11 @@ export function UserRegister() {
       agency: targetAgency, // TODO どこかで ID に変えておく
       role: role,
     };
-    await axios.post("http://localhost:8080/users", user).then((res) => {
-      history.push("/users/list");
-    });
+    await axios(session)
+      .post("/users", user)
+      .then((res) => {
+        history.push("/users/list");
+      });
   }
 
   return (

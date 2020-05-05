@@ -4,7 +4,8 @@ import { StandardLayout } from "../../../components/context/StandardLayout";
 import { useHistory, useParams } from "react-router-dom";
 import { Paper, TextField, Button } from "@material-ui/core";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import axios from "axios";
+import { SessionRepository } from "../../../context/session";
+import { useAxios } from "../../../context/axios";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,25 +30,27 @@ export function AgencyEdit() {
   const { id } = useParams();
   const history = useHistory();
   const classes = useStyles();
+  const repository = SessionRepository();
+  const session = repository.session();
+  const axios = useAxios;
 
   const [name, setName] = useState("");
 
   useEffect(() => {
     const fetchAgencyData = async () => {
-      const result = (await axios.get(`http://localhost:8080/agencies/${id}`))
-        .data;
+      const result = (await axios(session).get(`/agencies/${id}`)).data;
       setName(result.name);
     };
     fetchAgencyData();
-  }, [id]);
+  }, [id, axios, session]);
 
   async function onSubmit(e: SyntheticEvent) {
     e.preventDefault();
     const agency = {
       name: name,
     };
-    await axios
-      .patch(`http://localhost:8080/agencies/${id}`, agency)
+    await axios(session)
+      .patch(`/agencies/${id}`, agency)
       .then((res) => {
         history.push("/agencies/list");
       });

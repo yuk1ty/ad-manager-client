@@ -38,7 +38,7 @@ function App() {
             <PrivateRoute path="/users/:id/edit" children={<UserEdit />} />
             <PrivateRoute path="/agencies/list" children={<AgencyList />} />
             <PrivateRoute
-              path="/agencies/regsiter"
+              path="/agencies/register"
               children={<AgencyRegister />}
             />
             <PrivateRoute path="/agencies/:id/edit" children={<AgencyEdit />} />

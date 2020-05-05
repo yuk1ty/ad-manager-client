@@ -15,10 +15,11 @@ import {
   Radio,
   FormLabel,
 } from "@material-ui/core";
-import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { AgencyData } from "../../../context/types";
+import { useAxios } from "../../../context/axios";
+import { SessionRepository } from "../../../context/session";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -43,6 +44,9 @@ export function UserEdit() {
   const { id } = useParams();
   const history = useHistory();
   const classes = useStyles();
+  const repository = SessionRepository();
+  const session = repository.session();
+  const axios = useAxios;
 
   const [name, setName] = useState("");
   const [emailAddress, setAddress] = useState("");
@@ -52,8 +56,7 @@ export function UserEdit() {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const result = (await axios.get(`http://localhost:8080/users/${id}`))
-        .data;
+      const result = (await axios(session).get(`/users/${id}`)).data;
       setName(result.name);
       setAddress(result.emailAddress);
       setSelectedAgency(result.agency.id); // TODO
@@ -62,11 +65,11 @@ export function UserEdit() {
     fetchUserData();
 
     const fetchAgencyData = async () => {
-      const result = await axios.get("http://localhost:8080/agencies");
+      const result = await axios(session).get("/agencies");
       setAgencies(result.data);
     };
     fetchAgencyData();
-  }, [id]);
+  }, [id, axios, session]);
 
   async function onSubmit(e: SyntheticEvent) {
     e.preventDefault();
@@ -79,9 +82,11 @@ export function UserEdit() {
       agency: targetAgency, // TODO どこかで ID に変えておく
       role: role,
     };
-    await axios.patch(`http://localhost:8080/users/${id}`, user).then((res) => {
-      history.push("/users/list");
-    });
+    await axios(session)
+      .patch(`/users/${id}`, user)
+      .then((res) => {
+        history.push("/users/list");
+      });
   }
 
   return (

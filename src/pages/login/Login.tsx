@@ -3,7 +3,7 @@ import "./Login.css";
 import { useHistory } from "react-router-dom";
 import { Button, TextField } from "@material-ui/core";
 import { useCookies } from "react-cookie";
-import axios from "axios";
+import { useAxios } from "../../context/axios";
 
 interface LoginForm {
   userId: string;
@@ -17,9 +17,11 @@ export function Login() {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
 
+  const axios = useAxios();
+
   const doLogin = async () => {
     await axios
-      .post("http://localhost:8080/sessions", {
+      .post("/sessions", {
         userId: userId,
         password: password,
       })

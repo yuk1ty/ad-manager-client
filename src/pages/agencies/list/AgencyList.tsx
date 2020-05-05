@@ -20,6 +20,8 @@ import {
 } from "@material-ui/core";
 import { Edit, Delete, Add } from "@material-ui/icons";
 import { AgencyData } from "../../../context/types";
+import { SessionRepository } from "../../../context/session";
+import { useAxios } from "../../../context/axios";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -35,14 +37,17 @@ export function AgencyList() {
   const [agencies, setAgencies] = useState<AgencyData[]>([]);
   const classes = useStyles();
   const history = useHistory();
+  const repository = SessionRepository();
+  const session = repository.session();
+  const axios = useAxios;
 
   useEffect(() => {
     const fetchAgencyData = async () => {
-      const result = await axios.get("http://localhost:8080/agencies");
+      const result = await axios(session).get("http://localhost:8080/agencies");
       setAgencies(result.data);
     };
     fetchAgencyData();
-  }, []);
+  }, [axios, session]);
 
   function transitToRegisterPage() {
     history.push(`/agencies/register`);
@@ -55,8 +60,8 @@ export function AgencyList() {
 
   async function removeAgency(e: SyntheticEvent, agency: AgencyData) {
     e.preventDefault();
-    await axios
-      .delete(`http://localhost:8080/agencies/${agency.id}`)
+    await axios(session)
+      .delete(`/agencies/${agency.id}`)
       .then((res) => {
         const result = agencies.filter((item) => agency.id !== item.id);
         setAgencies(result);

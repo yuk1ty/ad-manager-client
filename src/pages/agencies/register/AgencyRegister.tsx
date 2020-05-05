@@ -5,7 +5,8 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { Header } from "../../../components/header/Header";
 import { StandardLayout } from "../../../components/context/StandardLayout";
 import { Paper, TextField, Button } from "@material-ui/core";
-import axios from "axios";
+import { SessionRepository } from "../../../context/session";
+import { useAxios } from "../../../context/axios";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -28,6 +29,9 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export function AgencyRegister() {
   const [name, setName] = useState("");
+  const repository = SessionRepository();
+  const session = repository.session();
+  const axios = useAxios;
 
   const history = useHistory();
   const classes = useStyles();
@@ -37,9 +41,11 @@ export function AgencyRegister() {
     const agency = {
       name: name,
     };
-    await axios.post("http://localhost:8080/agencies", agency).then((res) => {
-      history.push("/agencies/list");
-    });
+    await axios(session)
+      .post("/agencies", agency)
+      .then((res) => {
+        history.push("/agencies/list");
+      });
   }
 
   return (

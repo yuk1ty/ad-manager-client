@@ -1,7 +1,6 @@
 import React, { useState, useEffect, SyntheticEvent } from "react";
 import { Header } from "../../components/header/Header";
 import { StandardLayout } from "../../components/context/StandardLayout";
-import axios from "axios";
 import {
   Paper,
   TableContainer,
@@ -20,6 +19,8 @@ import {
 import { Add, Edit, Delete } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
 import { UserData } from "../../context/types";
+import { useAxios } from "../../context/axios";
+import { SessionRepository } from "../../context/session";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -35,14 +36,17 @@ export function UserList() {
   const [users, setUsers] = useState<UserData[]>([]);
   const classes = useStyles();
   const history = useHistory();
+  const repository = SessionRepository();
+  const session = repository.session();
+  const axios = useAxios;
 
   useEffect(() => {
     const fetchTableData = async () => {
-      const result = await axios.get("http://localhost:8080/users");
+      const result = await axios(session).get("/users");
       setUsers(result.data);
     };
     fetchTableData();
-  }, []);
+  }, [axios, session]); // TODO
 
   function transitToRegisterPage() {
     history.push(`/users/register`);
@@ -55,10 +59,12 @@ export function UserList() {
 
   async function removeUser(e: SyntheticEvent, user: UserData) {
     e.preventDefault();
-    await axios.delete(`http://localhost:8080/users/${user.id}`).then((res) => {
-      const result = users.filter((item) => user.id !== item.id);
-      setUsers(result);
-    });
+    await axios(session)
+      .delete(`/users/${user.id}`)
+      .then((res) => {
+        const result = users.filter((item) => user.id !== item.id);
+        setUsers(result);
+      });
   }
 
   return (

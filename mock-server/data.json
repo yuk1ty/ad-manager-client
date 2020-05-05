@@ -40,7 +40,7 @@
     }
   ],
   "sessions": {
-    "userId": "user_id",
-    "password": "password"
+    "userId": "user",
+    "password": "pass"
   }
 }
