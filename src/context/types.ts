@@ -10,3 +10,9 @@ export interface AgencyData {
   id: number;
   name: string;
 }
+
+export interface AdvertiserData {
+  id: number;
+  name: string;
+  domain: string;
+}

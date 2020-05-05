@@ -39,6 +39,18 @@
       "name": "博報堂"
     }
   ],
+  "advertisers": [
+    {
+      "id": 1,
+      "name": "サッポロビール",
+      "domain": "sapporobeer.jp"
+    },
+    {
+      "id": 2,
+      "name": "花王",
+      "domain": "kao.com"
+    }
+  ],
   "sessions": {
     "userId": "user",
     "password": "pass"

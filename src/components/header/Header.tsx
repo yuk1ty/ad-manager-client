@@ -40,6 +40,12 @@ export function Header() {
                 >
                   代理店管理
                 </Link>
+                <Link
+                  onClick={() => history.push("/advertisers/list")}
+                  color="inherit"
+                >
+                  広告主管理
+                </Link>
               </>
             )}
           </Typography>

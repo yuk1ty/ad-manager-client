@@ -1,6 +1,5 @@
 import React, { useState, useEffect, SyntheticEvent } from "react";
 import { useHistory } from "react-router-dom";
-import axios from "axios";
 import { Header } from "../../../components/header/Header";
 import { StandardLayout } from "../../../components/context/StandardLayout";
 import {
@@ -43,7 +42,7 @@ export function AgencyList() {
 
   useEffect(() => {
     const fetchAgencyData = async () => {
-      const result = await axios(session).get("http://localhost:8080/agencies");
+      const result = await axios(session).get("/agencies");
       setAgencies(result.data);
     };
     fetchAgencyData();
