@@ -18,11 +18,7 @@ import {
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-
-interface AgencyData {
-  id: number;
-  name: string;
-}
+import { AgencyData } from "../../../context/types";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

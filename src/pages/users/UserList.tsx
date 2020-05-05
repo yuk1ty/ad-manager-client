@@ -19,14 +19,7 @@ import {
 } from "@material-ui/core";
 import { Add, Edit, Delete } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
-
-interface UserData {
-  id: number;
-  name: string;
-  emailAddress: string;
-  agency: { id: number; name: string };
-  role: number;
-}
+import { UserData } from "../../context/types";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

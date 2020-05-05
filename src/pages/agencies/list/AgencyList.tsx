@@ -19,11 +19,7 @@ import {
   Fab,
 } from "@material-ui/core";
 import { Edit, Delete, Add } from "@material-ui/icons";
-
-interface AgencyTableData {
-  id: number;
-  name: string;
-}
+import { AgencyData } from "../../../context/types";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -36,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export function AgencyList() {
-  const [agencies, setAgencies] = useState<AgencyTableData[]>([]);
+  const [agencies, setAgencies] = useState<AgencyData[]>([]);
   const classes = useStyles();
   const history = useHistory();
 
@@ -52,12 +48,12 @@ export function AgencyList() {
     history.push(`/agencies/register`);
   }
 
-  function transitToEditPage(e: SyntheticEvent, agency: AgencyTableData) {
+  function transitToEditPage(e: SyntheticEvent, agency: AgencyData) {
     e.preventDefault();
     history.push(`/agencies/${agency.id}/edit`);
   }
 
-  async function removeAgency(e: SyntheticEvent, agency: AgencyTableData) {
+  async function removeAgency(e: SyntheticEvent, agency: AgencyData) {
     e.preventDefault();
     await axios
       .delete(`http://localhost:8080/agencies/${agency.id}`)
