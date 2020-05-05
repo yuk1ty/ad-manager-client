@@ -11,6 +11,8 @@ import { UserEdit } from "./pages/users/edit/UserEdit";
 import { AgencyList } from "./pages/agencies/list/AgencyList";
 import { AgencyEdit } from "./pages/agencies/edit/AgencyEdit";
 import { AgencyRegister } from "./pages/agencies/register/AgencyRegister";
+import { GuestRoute } from "./pages/routing/GuestRoute";
+import { PrivateRoute } from "./pages/routing/PrivateRoute";
 
 function App() {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -30,26 +32,17 @@ function App() {
       <Router>
         <div className="App">
           <Switch>
-            <Route path="/login">
-              <Login />
-            </Route>
-            <Route path="/users/list">
-              <UserList />
-            </Route>
-            <Route path="/users/register">
-              <UserRegister />
-            </Route>
-            <Route path="/users/:id/edit" component={UserEdit} />
-            <Route path="/agencies/list">
-              <AgencyList />
-            </Route>
-            <Route path="/agencies/register">
-              <AgencyRegister />
-            </Route>
-            <Route path="/agencies/:id/edit" component={AgencyEdit} />
-            <Route path="/">
-              <Dashboard />
-            </Route>
+            <GuestRoute path="/login" children={<Login />} />
+            <PrivateRoute path="/users/list" children={<UserList />} />
+            <PrivateRoute path="/users/register" children={<UserRegister />} />
+            <PrivateRoute path="/users/:id/edit" children={<UserEdit />} />
+            <PrivateRoute path="/agencies/list" children={<AgencyList />} />
+            <PrivateRoute
+              path="/agencies/regsiter"
+              children={<AgencyRegister />}
+            />
+            <PrivateRoute path="/agencies/:id/edit" children={<AgencyEdit />} />
+            <PrivateRoute path="/" children={<Dashboard />} />
           </Switch>
         </div>
       </Router>
