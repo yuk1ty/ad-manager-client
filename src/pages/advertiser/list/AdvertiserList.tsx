@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, SyntheticEvent } from "react";
 import { Header } from "../../../components/header/Header";
 import { StandardLayout } from "../../../components/context/StandardLayout";
 import { AdvertiserData } from "../../../context/types";
@@ -11,13 +11,31 @@ import {
   TableCell,
   TableBody,
   TableRow,
-  Button,
   Table,
+  makeStyles,
+  Theme,
+  createStyles,
+  Fab,
+  Tooltip,
+  IconButton,
 } from "@material-ui/core";
-import { Edit, Delete } from "@material-ui/icons";
+import { Edit, Delete, Add } from "@material-ui/icons";
+import { useHistory, Link } from "react-router-dom";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    absolute: {
+      position: "absolute",
+      bottom: theme.spacing(2),
+      right: theme.spacing(3),
+    },
+  })
+);
 
 export function AdvertiserList() {
   const [advertisers, setAdvertisers] = useState<AdvertiserData[]>([]);
+  const classes = useStyles();
+  const history = useHistory();
   const repository = SessionRepository();
   const session = repository.session();
   const axios = useAxios;
@@ -30,10 +48,41 @@ export function AdvertiserList() {
     fetchAdvertiserData();
   }, [axios, session]);
 
+  function transitToRegisterPage() {
+    history.push("/advertisers/register");
+  }
+
+  function transitToEditPage(e: SyntheticEvent, advertiser: AdvertiserData) {
+    e.preventDefault();
+    history.push(`/advertisers/${advertiser.id}/edit`);
+  }
+
+  async function removeAdvertiser(
+    e: SyntheticEvent,
+    advertiser: AdvertiserData
+  ) {
+    e.preventDefault();
+    await axios(session)
+      .delete(`/advertisers/${advertiser.id}`)
+      .then((res) => {
+        const result = advertisers.filter((item) => advertiser.id !== item.id);
+        setAdvertisers(result);
+      });
+  }
+
   return (
     <>
       <Header />
       <StandardLayout title="広告主一覧">
+        <Tooltip title="新規作成" aria-label="add">
+          <Fab
+            color="primary"
+            className={classes.absolute}
+            onClick={() => transitToRegisterPage()}
+          >
+            <Add />
+          </Fab>
+        </Tooltip>
         <TableContainer component={Paper}>
           <Table aria-label="table">
             <TableHead>
@@ -48,15 +97,27 @@ export function AdvertiserList() {
               {advertisers.map((advertiser) => (
                 <TableRow key={advertiser.id}>
                   <TableCell>{advertiser.id}</TableCell>
-                  <TableCell>{advertiser.name}</TableCell>
+                  <TableCell>
+                    <Link to={`/advertisers/${advertiser.id}/view`}>
+                      {advertiser.name}
+                    </Link>
+                  </TableCell>
                   <TableCell>{advertiser.domain}</TableCell>
                   <TableCell>
-                    <Button>
-                      <Edit />
-                    </Button>
-                    <Button>
-                      <Delete />
-                    </Button>
+                    <Tooltip title="編集">
+                      <IconButton>
+                        <Edit
+                          onClick={(e) => transitToEditPage(e, advertiser)}
+                        />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="削除">
+                      <IconButton>
+                        <Delete
+                          onClick={(e) => removeAdvertiser(e, advertiser)}
+                        />
+                      </IconButton>
+                    </Tooltip>
                   </TableCell>
                 </TableRow>
               ))}

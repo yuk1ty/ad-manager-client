@@ -71,7 +71,7 @@ export function UserList() {
     <>
       <Header />
       <StandardLayout title="ユーザー一覧">
-        <Tooltip title="Add" aria-label="add">
+        <Tooltip title="新規作成" aria-label="add">
           <Fab
             color="primary"
             className={classes.absolute}
