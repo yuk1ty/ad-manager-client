@@ -25,7 +25,7 @@ export function Login() {
         userId: userId,
         password: password,
       })
-      .then((res) => setCookie("x-adm-session", "abcde")); // TODO 便宜的にこうしているが、最終的にはサーバーサイドで Cookie をセットしてくれる
+      .then((res) => setCookie("x-adm-session", res.data.session));
     history.push("/");
   };
 
