@@ -16,6 +16,7 @@ import { PrivateRoute } from "./pages/routing/PrivateRoute";
 import { AdvertiserList } from "./pages/advertiser/list/AdvertiserList";
 import { AdvertiserView } from "./pages/advertiser/view/AdvertiserView";
 import { AdvertiserRegister } from "./pages/advertiser/register/AdvertiserRegister";
+import { AdvertiserEdit } from "./pages/advertiser/edit/AdvertiserEdit";
 
 function App() {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -56,6 +57,10 @@ function App() {
             <PrivateRoute
               path="/advertisers/:id/view"
               children={<AdvertiserView />}
+            />
+            <PrivateRoute
+              path="/advertisers/:id/edit"
+              children={<AdvertiserEdit />}
             />
             <PrivateRoute path="/" children={<Dashboard />} />
           </Switch>
