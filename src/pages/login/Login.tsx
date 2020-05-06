@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Login.css";
 import { useHistory } from "react-router-dom";
-import { Button, TextField } from "@material-ui/core";
+import { Button, TextField, Paper } from "@material-ui/core";
 import { useCookies } from "react-cookie";
 import { useAxios } from "../../context/axios";
 
@@ -31,23 +31,27 @@ export function Login() {
 
   return (
     <div className="login-form">
-      <h1>Login</h1>
-      <TextField
-        label="ユーザー ID"
-        name="name"
-        value={userId}
-        size="small"
-        onChange={(e) => setUserId(e.target.value)}
-      />
-      <TextField
-        label="パスワード"
-        name="password"
-        type="password"
-        value={password}
-        size="small"
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <Button onClick={doLogin}>ログイン</Button>
+      <Paper elevation={3}>
+        <h2>Login</h2>
+        <TextField
+          label="ユーザー ID"
+          fullWidth
+          name="name"
+          value={userId}
+          size="small"
+          onChange={(e) => setUserId(e.target.value)}
+        />
+        <TextField
+          label="パスワード"
+          fullWidth
+          name="password"
+          type="password"
+          value={password}
+          size="small"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <Button onClick={doLogin}>ログイン</Button>
+      </Paper>
     </div>
   );
 }

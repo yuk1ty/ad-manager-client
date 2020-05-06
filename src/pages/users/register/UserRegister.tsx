@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export function UserRegister() {
   const [name, setName] = useState("");
+  const [userId, setUserId] = useState("");
   const [emailAddress, setAddress] = useState("");
   const [rawPassword, setRawPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -70,6 +71,7 @@ export function UserRegister() {
     );
     const user = {
       name: name,
+      userId: userId,
       emailAddress: emailAddress,
       rawPassword: rawPassword,
       confirmPassword: confirmPassword,
@@ -103,6 +105,13 @@ export function UserRegister() {
               fullWidth
               size="small"
               onChange={(e) => setAddress(e.target.value)}
+            />
+            <TextField
+              label="ログイン用ユーザー ID"
+              value={userId}
+              fullWidth
+              size="small"
+              onChange={(e) => setUserId(e.target.value)}
             />
             <TextField
               label="登録用パスワード"
