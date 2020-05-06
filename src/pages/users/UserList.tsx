@@ -15,12 +15,15 @@ import {
   Theme,
   createStyles,
   Fab,
+  Chip,
 } from "@material-ui/core";
 import { Add, Edit, Delete } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
 import { UserData } from "../../context/types";
 import { useAxios } from "../../context/axios";
 import { SessionRepository } from "../../context/session";
+import PersonIcon from "@material-ui/icons/Person";
+import GroupIcon from "@material-ui/icons/Group";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -100,7 +103,21 @@ export function UserList() {
                   <TableCell>{user.emailAddress}</TableCell>
                   <TableCell>{user.agency.name}</TableCell>
                   <TableCell>
-                    {user.role === 1 ? "管理者" : "メンバー"}
+                    {user.role === 1 ? (
+                      <Chip
+                        icon={<PersonIcon />}
+                        label="管理者"
+                        size="small"
+                        color="primary"
+                      />
+                    ) : (
+                      <Chip
+                        icon={<GroupIcon />}
+                        label="メンバー"
+                        size="small"
+                        color="secondary"
+                      />
+                    )}
                   </TableCell>
                   <TableCell>
                     <Tooltip title="編集">
