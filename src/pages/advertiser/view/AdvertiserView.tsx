@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Header } from "../../../components/header/Header";
 import { StandardLayout } from "../../../components/context/StandardLayout";
 import {
@@ -16,6 +16,11 @@ import {
   TableCell,
   Chip,
 } from "@material-ui/core";
+import { SessionRepository } from "../../../context/session";
+import { useParams } from "react-router-dom";
+import { useAxios } from "../../../context/axios";
+import { AdvertiserData } from "../../../context/types";
+import { DeliveryStatusBadge } from "../../../components/badges/DeliveryStatusBadge";
 
 const userStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,8 +34,43 @@ const userStyles = makeStyles((theme: Theme) =>
   })
 );
 
+interface CampaignTableData {
+  id: number;
+  name: string;
+  deliveryStartAt: string;
+  deliveryEndAt: string;
+  deliveryStatus: number;
+  createdAt: string;
+}
+
 export function AdvertiserView() {
+  const { id } = useParams();
+  const [advertiser, setAdvertiser] = useState<AdvertiserData>({
+    id: 0,
+    name: "",
+    domain: "",
+  });
+  const [campaigns, setCampaigns] = useState<CampaignTableData[]>([]);
+  const repository = SessionRepository();
+  const session = repository.session();
+  const axios = useAxios;
   const classes = userStyles();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios(session).get(`/advertisers/${id}`);
+      setAdvertiser(result.data);
+    };
+    fetchData();
+  }, [id, axios, session]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios(session).get(`/advertisers/${id}/campaigns`);
+      setCampaigns(result.data);
+    };
+    fetchData();
+  }, [id, axios, session]);
 
   return (
     <>
@@ -42,19 +82,19 @@ export function AdvertiserView() {
               ID
             </Grid>
             <Grid item xs={9}>
-              1
+              {advertiser.id}
             </Grid>
             <Grid item xs={3}>
               名前
             </Grid>
             <Grid item xs={9}>
-              広告主 A
+              {advertiser.name}
             </Grid>
             <Grid item xs={3}>
               ドメイン
             </Grid>
             <Grid item xs={9}>
-              google.com
+              {advertiser.domain}
             </Grid>
           </Grid>
         </Paper>
@@ -75,16 +115,18 @@ export function AdvertiserView() {
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow>
-                <TableCell>1</TableCell>
-                <TableCell>キャンペーン1</TableCell>
-                <TableCell>2020/05/14 00:00:00</TableCell>
-                <TableCell>2020/06/01 23:59:59</TableCell>
-                <TableCell>
-                  <Chip label="配信中" color="primary" />
-                </TableCell>
-                <TableCell>2020/05/01 15:45:39</TableCell>
-              </TableRow>
+              {campaigns.map((campaign) => (
+                <TableRow>
+                  <TableCell>{campaign.id}</TableCell>
+                  <TableCell>{campaign.name}</TableCell>
+                  <TableCell>{campaign.deliveryStartAt}</TableCell>
+                  <TableCell>{campaign.deliveryEndAt}</TableCell>
+                  <TableCell>
+                    <DeliveryStatusBadge status={campaign.deliveryStatus} />
+                  </TableCell>
+                  <TableCell>{campaign.createdAt}</TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </TableContainer>
