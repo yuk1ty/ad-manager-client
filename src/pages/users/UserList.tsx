@@ -15,15 +15,12 @@ import {
   Theme,
   createStyles,
   Fab,
-  Chip,
 } from "@material-ui/core";
 import { Add, Edit, Delete } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
 import { UserData } from "../../context/types";
 import { useAxios } from "../../context/axios";
 import { SessionRepository } from "../../context/session";
-import PersonIcon from "@material-ui/icons/Person";
-import GroupIcon from "@material-ui/icons/Group";
 import { AuthorityBadge } from "../../components/badges/AuthorityBadge";
 
 const useStyles = makeStyles((theme: Theme) =>

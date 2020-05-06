@@ -17,7 +17,7 @@ import {
   Chip,
 } from "@material-ui/core";
 import { SessionRepository } from "../../../context/session";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useAxios } from "../../../context/axios";
 import { AdvertiserData } from "../../../context/types";
 import { DeliveryStatusBadge } from "../../../components/badges/DeliveryStatusBadge";
@@ -118,7 +118,11 @@ export function AdvertiserView() {
               {campaigns.map((campaign) => (
                 <TableRow>
                   <TableCell>{campaign.id}</TableCell>
-                  <TableCell>{campaign.name}</TableCell>
+                  <TableCell>
+                    <Link to={`/campaigns/${campaign.id}`}>
+                      {campaign.name}
+                    </Link>
+                  </TableCell>
                   <TableCell>{campaign.deliveryStartAt}</TableCell>
                   <TableCell>{campaign.deliveryEndAt}</TableCell>
                   <TableCell>

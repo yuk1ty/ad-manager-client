@@ -16,3 +16,22 @@ export interface AdvertiserData {
   name: string;
   domain: string;
 }
+
+export interface CampaignData {
+  id: number;
+  name: string;
+  deliveryStatus: number;
+  billingType: number;
+  monthlyBudgetLimit: number;
+  dailyBudgetUpperLimit: number;
+  charge: number;
+  deliveryStartAt: string;
+  deliveryEndAt: string;
+  adGroups: AdGroupData[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AdGroupData {}
+
+export interface AdData {}
