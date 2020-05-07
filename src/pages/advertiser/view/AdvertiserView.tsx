@@ -14,7 +14,6 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Chip,
 } from "@material-ui/core";
 import { SessionRepository } from "../../../context/session";
 import { useParams, Link } from "react-router-dom";

@@ -25,7 +25,7 @@ import { useHistory, Link } from "react-router-dom";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     absolute: {
-      position: "absolute",
+      position: "fixed",
       bottom: theme.spacing(2),
       right: theme.spacing(3),
     },

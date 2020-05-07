@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, SyntheticEvent } from "react";
 import { useParams } from "react-router-dom";
 import { CampaignData, AdGroupData } from "../../../context/types";
 import { SessionRepository } from "../../../context/session";
@@ -18,8 +18,13 @@ import {
   TableRow,
   TableCell,
   TableBody,
+  Button,
+  Tooltip,
+  Fab,
+  Box,
 } from "@material-ui/core";
 import { DeliveryStatusBadge } from "../../../components/badges/DeliveryStatusBadge";
+import { Edit, Delete } from "@material-ui/icons";
 
 const userStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,6 +34,18 @@ const userStyles = makeStyles((theme: Theme) =>
     },
     title: {
       padding: theme.spacing(0, 0, 3, 0),
+    },
+    menu: {
+      textAlign: "right",
+      margin: theme.spacing(3, 0),
+    },
+    absolute: {
+      position: "fixed",
+      bottom: theme.spacing(2),
+      right: theme.spacing(3),
+    },
+    opsBtn: {
+      right: theme.spacing(2),
     },
   })
 );
@@ -64,10 +81,77 @@ export function CampaignView() {
     fetchCampaignData();
   }, [id, axios, session]);
 
+  async function changeDeliveryStatus(
+    e: SyntheticEvent,
+    deliveryStatus: number
+  ) {
+    e.preventDefault();
+    await axios(session)
+      .patch(`/campaigns/${id}/deliveryStatus`, {
+        deliveryStatus: deliveryStatus,
+      })
+      .then((res) => {
+        setCampaign(res.data);
+      });
+  }
+
+  function isNotHalted(): boolean {
+    return (
+      campaign.deliveryStatus !== 1 &&
+      campaign.deliveryStatus !== 2 &&
+      campaign.deliveryStatus !== 4 &&
+      campaign.deliveryStatus !== 5
+    );
+  }
+
+  function isResumed(): boolean {
+    return campaign.deliveryStatus === 4;
+  }
+
   return (
     <>
       <Header />
       <StandardLayout title="キャンペーン詳細">
+        <Box className={classes.absolute} component="div">
+          <Tooltip title="編集" aria-label="add">
+            <Fab color="default" className={classes.opsBtn}>
+              <Edit />
+            </Fab>
+          </Tooltip>
+          <Tooltip title="削除" aria-label="add">
+            <Fab color="secondary">
+              <Delete />
+            </Fab>
+          </Tooltip>
+        </Box>
+        {isNotHalted() && (
+          <Grid container spacing={0} className={classes.menu}>
+            <Grid item xs={9}></Grid>
+            <Grid item xs={3}>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={(e) => changeDeliveryStatus(e, 4)}
+              >
+                配信一時停止
+              </Button>
+            </Grid>
+          </Grid>
+        )}
+        {isResumed() && (
+          <Grid container spacing={0} className={classes.menu}>
+            <Grid item xs={9}></Grid>
+            <Grid item xs={3} alignItems="flex-end">
+              <Button
+                variant="contained"
+                color="default"
+                onClick={(e) => changeDeliveryStatus(e, 3)}
+              >
+                配信再開
+              </Button>
+            </Grid>
+          </Grid>
+        )}
         <Paper elevation={3} className={classes.inner}>
           <Grid container spacing={3}>
             <Grid item xs={3}>
