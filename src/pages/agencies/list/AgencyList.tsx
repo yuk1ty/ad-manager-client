@@ -21,6 +21,8 @@ import { Edit, Delete, Add } from "@material-ui/icons";
 import { AgencyData } from "../../../context/types";
 import { SessionRepository } from "../../../context/session";
 import { useAxios } from "../../../context/axios";
+import { RegisterStickyButtons } from "../../../components/operations/RegisterStickyButtons";
+import { TableSideOperations } from "../../../components/operations/TableSideOperations";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -71,15 +73,7 @@ export function AgencyList() {
     <>
       <Header />
       <StandardLayout title="代理店一覧">
-        <Tooltip title="Add" aria-label="add">
-          <Fab
-            color="primary"
-            className={classes.absolute}
-            onClick={() => transitToRegisterPage()}
-          >
-            <Add />
-          </Fab>
-        </Tooltip>
+        <RegisterStickyButtons onClick={transitToRegisterPage} />
         <TableContainer component={Paper}>
           <Table aria-label="table">
             <TableHead>
@@ -95,12 +89,11 @@ export function AgencyList() {
                   <TableCell>{agency.id}</TableCell>
                   <TableCell>{agency.name}</TableCell>
                   <TableCell>
-                    <Button>
-                      <Edit onClick={(e) => transitToEditPage(e, agency)} />
-                    </Button>
-                    <Button>
-                      <Delete onClick={(e) => removeAgency(e, agency)} />
-                    </Button>
+                    <TableSideOperations
+                      entity={agency}
+                      onEditClick={(e) => transitToEditPage(e, agency)}
+                      onDeleteClick={(e) => removeAgency(e, agency)}
+                    />
                   </TableCell>
                 </TableRow>
               ))}

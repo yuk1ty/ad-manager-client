@@ -22,6 +22,8 @@ import { UserData } from "../../context/types";
 import { useAxios } from "../../context/axios";
 import { SessionRepository } from "../../context/session";
 import { AuthorityBadge } from "../../components/badges/AuthorityBadge";
+import { RegisterStickyButtons } from "../../components/operations/RegisterStickyButtons";
+import { TableSideOperations } from "../../components/operations/TableSideOperations";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -72,15 +74,7 @@ export function UserList() {
     <>
       <Header />
       <StandardLayout title="ユーザー一覧">
-        <Tooltip title="新規作成" aria-label="add">
-          <Fab
-            color="primary"
-            className={classes.absolute}
-            onClick={() => transitToRegisterPage()}
-          >
-            <Add />
-          </Fab>
-        </Tooltip>
+        <RegisterStickyButtons onClick={transitToRegisterPage} />
         <TableContainer component={Paper}>
           <Table aria-label="table">
             <TableHead>
@@ -104,22 +98,11 @@ export function UserList() {
                     <AuthorityBadge authority={user.role} />
                   </TableCell>
                   <TableCell>
-                    <Tooltip title="編集">
-                      <IconButton
-                        onClick={(e) => transitToEditPage(e, user)}
-                        aria-label="edit"
-                      >
-                        <Edit />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="削除">
-                      <IconButton
-                        onClick={(e) => removeUser(e, user)}
-                        aria-label="delete"
-                      >
-                        <Delete />
-                      </IconButton>
-                    </Tooltip>
+                    <TableSideOperations
+                      entity={user}
+                      onEditClick={(e) => transitToEditPage(e, user)}
+                      onDeleteClick={(e) => removeUser(e, user)}
+                    />
                   </TableCell>
                 </TableRow>
               ))}

@@ -21,6 +21,8 @@ import {
 } from "@material-ui/core";
 import { Edit, Delete, Add } from "@material-ui/icons";
 import { useHistory, Link } from "react-router-dom";
+import { RegisterStickyButtons } from "../../../components/operations/RegisterStickyButtons";
+import { TableSideOperations } from "../../../components/operations/TableSideOperations";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -74,15 +76,7 @@ export function AdvertiserList() {
     <>
       <Header />
       <StandardLayout title="広告主一覧">
-        <Tooltip title="新規作成" aria-label="add">
-          <Fab
-            color="primary"
-            className={classes.absolute}
-            onClick={() => transitToRegisterPage()}
-          >
-            <Add />
-          </Fab>
-        </Tooltip>
+        <RegisterStickyButtons onClick={transitToRegisterPage} />
         <TableContainer component={Paper}>
           <Table aria-label="table">
             <TableHead>
@@ -104,20 +98,11 @@ export function AdvertiserList() {
                   </TableCell>
                   <TableCell>{advertiser.domain}</TableCell>
                   <TableCell>
-                    <Tooltip title="編集">
-                      <IconButton>
-                        <Edit
-                          onClick={(e) => transitToEditPage(e, advertiser)}
-                        />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="削除">
-                      <IconButton>
-                        <Delete
-                          onClick={(e) => removeAdvertiser(e, advertiser)}
-                        />
-                      </IconButton>
-                    </Tooltip>
+                    <TableSideOperations
+                      entity={advertiser}
+                      onEditClick={(e) => transitToEditPage(e, advertiser)}
+                      onDeleteClick={(e) => removeAdvertiser(e, advertiser)}
+                    />
                   </TableCell>
                 </TableRow>
               ))}
