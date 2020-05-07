@@ -47,6 +47,11 @@ export interface AdGroupData {
 
 export interface SegmentData {}
 
-export interface AdTableData {}
+export interface AdTableData {
+  id: number;
+  name: string;
+  deliverySwitch: number;
+  createdAt: string;
+}
 
 export interface AdData {}

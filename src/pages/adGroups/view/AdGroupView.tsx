@@ -9,6 +9,14 @@ import {
   Theme,
   createStyles,
   Grid,
+  Typography,
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Button,
 } from "@material-ui/core";
 import { SessionRepository } from "../../../context/session";
 import { useAxios } from "../../../context/axios";
@@ -21,6 +29,10 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     title: {
       padding: theme.spacing(0, 0, 3, 0),
+    },
+    adMenu: {
+      textAlign: "right",
+      margin: theme.spacing(0, 0, 2, 0),
     },
   })
 );
@@ -103,6 +115,45 @@ export function AdGroupView() {
             </Grid>
           </Grid>
         </Paper>
+
+        <Typography variant="h5" className={classes.title} component="div">
+          保有広告
+        </Typography>
+        <Grid container spacing={0} className={classes.adMenu}>
+          <Grid item xs={9}></Grid>
+          <Grid item xs={3}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => history.push(`/ad-groups/${id}/ad/register`)}
+            >
+              広告グループを追加する
+            </Button>
+          </Grid>
+        </Grid>
+        <TableContainer component={Paper}>
+          <Table aria-label="table">
+            <TableHead>
+              <TableRow>
+                <TableCell>#</TableCell>
+                <TableCell>広告名</TableCell>
+                <TableCell>配信スイッチ</TableCell>
+                <TableCell>作成日時</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {ads !== null &&
+                ads.map((ad) => (
+                  <TableRow key={ad.id}>
+                    <TableCell>{ad.id}</TableCell>
+                    <TableCell>{ad.name}</TableCell>
+                    <TableCell>{ad.deliverySwitch}</TableCell>
+                    <TableCell>{ad.createdAt}</TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </StandardLayout>
     </>
   );
