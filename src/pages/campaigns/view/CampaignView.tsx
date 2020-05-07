@@ -223,15 +223,16 @@ export function CampaignView() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {adGroups.map((adGroup) => (
-                <TableRow key={adGroup.id}>
-                  <TableCell>{adGroup.id}</TableCell>
-                  <TableCell>{adGroup.name}</TableCell>
-                  <TableCell>{adGroup.deliveryStartAt}</TableCell>
-                  <TableCell>{adGroup.deliveryEndAt}</TableCell>
-                  <TableCell>{adGroup.createdAt}</TableCell>
-                </TableRow>
-              ))}
+              {adGroups !== null &&
+                adGroups.map((adGroup) => (
+                  <TableRow key={adGroup.id}>
+                    <TableCell>{adGroup.id}</TableCell>
+                    <TableCell>{adGroup.name}</TableCell>
+                    <TableCell>{adGroup.deliveryStartAt}</TableCell>
+                    <TableCell>{adGroup.deliveryEndAt}</TableCell>
+                    <TableCell>{adGroup.createdAt}</TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </TableContainer>

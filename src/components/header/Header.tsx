@@ -46,6 +46,12 @@ export function Header() {
                 >
                   広告主管理
                 </Link>
+                <Link
+                  onClick={() => history.push("/campaigns/list")}
+                  color="inherit"
+                >
+                  キャンペーン管理
+                </Link>
               </>
             )}
           </Typography>

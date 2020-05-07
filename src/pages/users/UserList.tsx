@@ -9,14 +9,7 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  IconButton,
-  Tooltip,
-  makeStyles,
-  Theme,
-  createStyles,
-  Fab,
 } from "@material-ui/core";
-import { Add, Edit, Delete } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
 import { UserData } from "../../context/types";
 import { useAxios } from "../../context/axios";
@@ -25,19 +18,8 @@ import { AuthorityBadge } from "../../components/badges/AuthorityBadge";
 import { RegisterStickyButtons } from "../../components/operations/RegisterStickyButtons";
 import { TableSideOperations } from "../../components/operations/TableSideOperations";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    absolute: {
-      position: "absolute",
-      bottom: theme.spacing(2),
-      right: theme.spacing(3),
-    },
-  })
-);
-
 export function UserList() {
   const [users, setUsers] = useState<UserData[]>([]);
-  const classes = useStyles();
   const history = useHistory();
   const repository = SessionRepository();
   const session = repository.session();

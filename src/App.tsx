@@ -18,6 +18,9 @@ import { AdvertiserView } from "./pages/advertiser/view/AdvertiserView";
 import { AdvertiserRegister } from "./pages/advertiser/register/AdvertiserRegister";
 import { AdvertiserEdit } from "./pages/advertiser/edit/AdvertiserEdit";
 import { CampaignView } from "./pages/campaigns/view/CampaignView";
+import { CampaignList } from "./pages/campaigns/list/CampaignList";
+import { CampaignRegister } from "./pages/campaigns/register/CampaignRegister";
+import { CampaignEdit } from "./pages/campaigns/edit/CampaignEdit";
 
 function App() {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -63,7 +66,19 @@ function App() {
               path="/advertisers/:id/edit"
               children={<AdvertiserEdit />}
             />
-            <PrivateRoute path="/campaigns/:id" children={<CampaignView />} />
+            <PrivateRoute path="/campaigns/list" children={<CampaignList />} />
+            <PrivateRoute
+              path="/campaigns/register"
+              children={<CampaignRegister />}
+            />
+            <PrivateRoute
+              path="/campaigns/:id/view"
+              children={<CampaignView />}
+            />
+            <PrivateRoute
+              path="/campaigns/:id/edit"
+              children={<CampaignEdit />}
+            />
             <PrivateRoute path="/" children={<Dashboard />} />
           </Switch>
         </div>

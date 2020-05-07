@@ -12,31 +12,13 @@ import {
   TableBody,
   TableRow,
   Table,
-  makeStyles,
-  Theme,
-  createStyles,
-  Fab,
-  Tooltip,
-  IconButton,
 } from "@material-ui/core";
-import { Edit, Delete, Add } from "@material-ui/icons";
 import { useHistory, Link } from "react-router-dom";
 import { RegisterStickyButtons } from "../../../components/operations/RegisterStickyButtons";
 import { TableSideOperations } from "../../../components/operations/TableSideOperations";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    absolute: {
-      position: "fixed",
-      bottom: theme.spacing(2),
-      right: theme.spacing(3),
-    },
-  })
-);
-
 export function AdvertiserList() {
   const [advertisers, setAdvertisers] = useState<AdvertiserData[]>([]);
-  const classes = useStyles();
   const history = useHistory();
   const repository = SessionRepository();
   const session = repository.session();
