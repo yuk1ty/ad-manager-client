@@ -1,5 +1,5 @@
 import React, { useState, useEffect, SyntheticEvent } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory, Link } from "react-router-dom";
 import { CampaignData, AdGroupData } from "../../../context/types";
 import { SessionRepository } from "../../../context/session";
 import { useAxios } from "../../../context/axios";
@@ -246,7 +246,11 @@ export function CampaignView() {
                 adGroups.map((adGroup) => (
                   <TableRow key={adGroup.id}>
                     <TableCell>{adGroup.id}</TableCell>
-                    <TableCell>{adGroup.name}</TableCell>
+                    <TableCell>
+                      <Link to={`/ad-groups/${adGroup.id}/view`}>
+                        {adGroup.name}
+                      </Link>
+                    </TableCell>
                     <TableCell>{adGroup.deliveryStartAt}</TableCell>
                     <TableCell>{adGroup.deliveryEndAt}</TableCell>
                     <TableCell>{adGroup.createdAt}</TableCell>

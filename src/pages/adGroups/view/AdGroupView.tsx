@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory, Link } from "react-router-dom";
 import { AdGroupData, AdTableData } from "../../../context/types";
 import { Header } from "../../../components/header/Header";
 import { StandardLayout } from "../../../components/context/StandardLayout";
@@ -20,6 +20,7 @@ import {
 } from "@material-ui/core";
 import { SessionRepository } from "../../../context/session";
 import { useAxios } from "../../../context/axios";
+import { DeliverySwitchBadge } from "../../../components/badges/DeliverySwitchBadge";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -67,6 +68,14 @@ export function AdGroupView() {
     };
     fetchCampaignData();
   }, [id, axios, session]);
+
+  function creativeCount(ad: AdTableData): number {
+    if (ad.creatives !== undefined) {
+      return ad.creatives.length;
+    } else {
+      return 0;
+    }
+  }
 
   return (
     <>
@@ -127,7 +136,7 @@ export function AdGroupView() {
               color="primary"
               onClick={() => history.push(`/ad-groups/${id}/ad/register`)}
             >
-              広告グループを追加する
+              広告を追加する
             </Button>
           </Grid>
         </Grid>
@@ -138,6 +147,7 @@ export function AdGroupView() {
                 <TableCell>#</TableCell>
                 <TableCell>広告名</TableCell>
                 <TableCell>配信スイッチ</TableCell>
+                <TableCell>クリエイティブ件数</TableCell>
                 <TableCell>作成日時</TableCell>
               </TableRow>
             </TableHead>
@@ -146,8 +156,16 @@ export function AdGroupView() {
                 ads.map((ad) => (
                   <TableRow key={ad.id}>
                     <TableCell>{ad.id}</TableCell>
-                    <TableCell>{ad.name}</TableCell>
-                    <TableCell>{ad.deliverySwitch}</TableCell>
+                    <TableCell>
+                      <Link to={`/ads/${ad.id}/view`}>{ad.name}</Link>
+                    </TableCell>
+                    <TableCell>
+                      <DeliverySwitchBadge state={ad.deliverySwitch} />
+                    </TableCell>
+                    <TableCell>
+                      {creativeCount(ad)}
+                      {" 件"}
+                    </TableCell>
                     <TableCell>{ad.createdAt}</TableCell>
                   </TableRow>
                 ))}

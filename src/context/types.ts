@@ -51,7 +51,13 @@ export interface AdTableData {
   id: number;
   name: string;
   deliverySwitch: number;
+  creatives: Creative[];
   createdAt: string;
+}
+
+export interface Creative {
+  id: number;
+  name: string;
 }
 
 export interface AdData {}
