@@ -21,6 +21,8 @@ import { CampaignView } from "./pages/campaigns/view/CampaignView";
 import { CampaignList } from "./pages/campaigns/list/CampaignList";
 import { CampaignRegister } from "./pages/campaigns/register/CampaignRegister";
 import { CampaignEdit } from "./pages/campaigns/edit/CampaignEdit";
+import { AdGroupRegister } from "./pages/adGroups/register/AdGroupRegister";
+import { AdGroupView } from "./pages/adGroups/view/AdGroupView";
 
 function App() {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -78,6 +80,14 @@ function App() {
             <PrivateRoute
               path="/campaigns/:id/edit"
               children={<CampaignEdit />}
+            />
+            <PrivateRoute
+              path="/ad-groups/:id/view"
+              children={<AdGroupView />}
+            />
+            <PrivateRoute
+              path="/campaigns/:id/ad-groups/register"
+              children={<AdGroupRegister />}
             />
             <PrivateRoute path="/" children={<Dashboard />} />
           </Switch>

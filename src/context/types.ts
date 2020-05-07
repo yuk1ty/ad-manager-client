@@ -35,9 +35,18 @@ export interface CampaignData {
 export interface AdGroupData {
   id: number;
   name: string;
+  monthlyBudget: number;
+  dailyBudget: number;
   deliveryStartAt: string;
   deliveryEndAt: string;
+  segments: SegmentData[];
+  ads: AdData[];
   createdAt: string;
+  updatedAt: string;
 }
+
+export interface SegmentData {}
+
+export interface AdTableData {}
 
 export interface AdData {}

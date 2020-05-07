@@ -1,5 +1,12 @@
 import React from "react";
+import { Header } from "../../../components/header/Header";
+import { StandardLayout } from "../../../components/context/StandardLayout";
 
 export function CampaignEdit() {
-  return <div>Hello, Edit</div>;
+  return (
+    <>
+      <Header />
+      <StandardLayout title="キャンペーン編集"></StandardLayout>
+    </>
+  );
 }

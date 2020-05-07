@@ -1,5 +1,5 @@
 import React, { useState, useEffect, SyntheticEvent } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { CampaignData, AdGroupData } from "../../../context/types";
 import { SessionRepository } from "../../../context/session";
 import { useAxios } from "../../../context/axios";
@@ -33,11 +33,15 @@ const userStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(6),
     },
     title: {
-      padding: theme.spacing(0, 0, 3, 0),
+      padding: theme.spacing(0, 0, 0, 0),
     },
     menu: {
       textAlign: "right",
       margin: theme.spacing(3, 0),
+    },
+    adgMenu: {
+      textAlign: "right",
+      margin: theme.spacing(0, 0, 2, 0),
     },
     absolute: {
       position: "fixed",
@@ -71,6 +75,7 @@ export function CampaignView() {
   const session = repository.session();
   const axios = useAxios;
   const classes = userStyles();
+  const history = useHistory();
 
   useEffect(() => {
     const fetchCampaignData = async () => {
@@ -87,7 +92,7 @@ export function CampaignView() {
   ) {
     e.preventDefault();
     await axios(session)
-      .patch(`/campaigns/${id}/deliveryStatus`, {
+      .patch(`/campaigns/${id}/delivery-status`, {
         deliveryStatus: deliveryStatus,
       })
       .then((res) => {
@@ -211,6 +216,20 @@ export function CampaignView() {
         <Typography variant="h5" className={classes.title} component="div">
           保有広告グループ
         </Typography>
+        <Grid container spacing={0} className={classes.adgMenu}>
+          <Grid item xs={9}></Grid>
+          <Grid item xs={3}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() =>
+                history.push(`/campaigns/${id}/ad-groups/register`)
+              }
+            >
+              広告グループを追加する
+            </Button>
+          </Grid>
+        </Grid>
         <TableContainer component={Paper}>
           <Table aria-label="table">
             <TableHead>

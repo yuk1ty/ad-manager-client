@@ -64,6 +64,7 @@ export function AdvertiserView() {
   }, [id, axios, session]);
 
   useEffect(() => {
+    // TODO たぶんこちらは1つにまとめられるので、1回の取得で十分
     const fetchData = async () => {
       const result = await axios(session).get(`/advertisers/${id}/campaigns`);
       setCampaigns(result.data);
@@ -118,7 +119,7 @@ export function AdvertiserView() {
                 <TableRow key={campaign.id}>
                   <TableCell>{campaign.id}</TableCell>
                   <TableCell>
-                    <Link to={`/campaigns/${campaign.id}`}>
+                    <Link to={`/campaigns/${campaign.id}/view`}>
                       {campaign.name}
                     </Link>
                   </TableCell>
