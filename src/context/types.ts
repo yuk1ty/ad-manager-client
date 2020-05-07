@@ -32,6 +32,12 @@ export interface CampaignData {
   updatedAt: string;
 }
 
-export interface AdGroupData {}
+export interface AdGroupData {
+  id: number;
+  name: string;
+  deliveryStartAt: string;
+  deliveryEndAt: string;
+  createdAt: string;
+}
 
 export interface AdData {}

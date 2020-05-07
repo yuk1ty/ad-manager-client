@@ -116,7 +116,7 @@ export function AdvertiserView() {
             </TableHead>
             <TableBody>
               {campaigns.map((campaign) => (
-                <TableRow>
+                <TableRow key={campaign.id}>
                   <TableCell>{campaign.id}</TableCell>
                   <TableCell>
                     <Link to={`/campaigns/${campaign.id}`}>

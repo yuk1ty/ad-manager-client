@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { CampaignData } from "../../../context/types";
+import { CampaignData, AdGroupData } from "../../../context/types";
 import { SessionRepository } from "../../../context/session";
 import { useAxios } from "../../../context/axios";
 import { Header } from "../../../components/header/Header";
@@ -11,6 +11,13 @@ import {
   Theme,
   createStyles,
   Grid,
+  Typography,
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
 } from "@material-ui/core";
 import { DeliveryStatusBadge } from "../../../components/badges/DeliveryStatusBadge";
 
@@ -42,15 +49,17 @@ export function CampaignView() {
     createdAt: "",
     updatedAt: "",
   });
+  const [adGroups, setAdGroups] = useState<AdGroupData[]>([]);
   const repository = SessionRepository();
   const session = repository.session();
-  const axios = useAxios();
+  const axios = useAxios;
   const classes = userStyles();
 
   useEffect(() => {
     const fetchCampaignData = async () => {
-      const result = await axios.get(`/campaigns/${id}`);
+      const result = await axios(session).get(`/campaigns/${id}`);
       setCampaign(result.data);
+      setAdGroups(result.data.adGroups);
     };
     fetchCampaignData();
   }, [id, axios, session]);
@@ -114,6 +123,34 @@ export function CampaignView() {
             </Grid>
           </Grid>
         </Paper>
+
+        <Typography variant="h5" className={classes.title} component="div">
+          保有広告グループ
+        </Typography>
+        <TableContainer component={Paper}>
+          <Table aria-label="table">
+            <TableHead>
+              <TableRow>
+                <TableCell>#</TableCell>
+                <TableCell>広告グループ名</TableCell>
+                <TableCell>配信開始日</TableCell>
+                <TableCell>配信終了日</TableCell>
+                <TableCell>作成日時</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {adGroups.map((adGroup) => (
+                <TableRow key={adGroup.id}>
+                  <TableCell>{adGroup.id}</TableCell>
+                  <TableCell>{adGroup.name}</TableCell>
+                  <TableCell>{adGroup.deliveryStartAt}</TableCell>
+                  <TableCell>{adGroup.deliveryEndAt}</TableCell>
+                  <TableCell>{adGroup.createdAt}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </StandardLayout>
     </>
   );
