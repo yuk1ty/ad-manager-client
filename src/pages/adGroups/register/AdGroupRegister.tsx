@@ -13,6 +13,7 @@ import {
 import { useParams, useHistory } from "react-router-dom";
 import { SessionRepository } from "../../../context/session";
 import { useAxios } from "../../../context/axios";
+import { useDropzone } from "react-dropzone";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,6 +35,12 @@ const useStyles = makeStyles((theme: Theme) =>
     submitButton: {
       margin: theme.spacing(2, 0, 1, 0),
     },
+    fileUploadArea: {
+      padding: theme.spacing(2),
+      backgroundColor: theme.palette.background.default,
+      border: "1px dotted #ccc",
+      textAlign: "center",
+    },
   })
 );
 
@@ -44,11 +51,28 @@ export function AdGroupRegister() {
   const [dailyBudget, setDailyBudget] = useState(0);
   const [deliveryStartAt, setDeliveryStartAt] = useState("2020-05-01T00:00");
   const [deliveryEndAt, setDeliveryEndAt] = useState("2020-05-01T00:00");
+  const [segmentName, setSegmentName] = useState("");
   const classes = useStyles();
   const repository = SessionRepository();
   const session = repository.session();
   const axios = useAxios;
   const history = useHistory();
+
+  const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
+  const file = acceptedFiles.map((file) => (
+    <li key={file.name}>
+      {file.name} - {file.size} bytes
+    </li>
+  ));
+
+  function readFileAsText(file: Blob): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = () => reject(reader.error);
+      reader.onload = () => resolve((reader.result as string) || "");
+      reader.readAsText(file);
+    });
+  }
 
   async function onSubmit(e: SyntheticEvent) {
     e.preventDefault();
@@ -59,6 +83,10 @@ export function AdGroupRegister() {
       dailyBudget: dailyBudget,
       deliveryStartAt: deliveryStartAt,
       deliveryEndAt: deliveryEndAt,
+      segments: {
+        name: segmentName,
+        deviceIds: readFileAsText(acceptedFiles[0]),
+      },
     };
 
     await axios(session)
@@ -118,7 +146,21 @@ export function AdGroupRegister() {
               onChange={(e) => setDeliveryEndAt(e.target.value)}
             />
             <FormControl fullWidth>
-              {/* TODO csv ファイルアップロード */}
+              <TextField
+                id="segment-name"
+                label="セグメント名"
+                fullWidth
+                value={segmentName}
+                onChange={(e) => setSegmentName(e.target.value)}
+              />
+              <div {...getRootProps()} className={classes.fileUploadArea}>
+                <input {...getInputProps()} />
+                {<p>ファイルをドラッグ & ドロップするかクリックしてください</p>}
+              </div>
+              <aside>
+                <h4>アップロード予定のファイル</h4>
+                <ul>{file}</ul>
+              </aside>
             </FormControl>
             <Button
               type="submit"
