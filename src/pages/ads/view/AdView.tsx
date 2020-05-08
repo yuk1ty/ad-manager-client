@@ -120,7 +120,7 @@ export function AdView() {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => history.push(`/ads/${id}/creatives/register`)}
+                onClick={() => history.push(`/ads/${id}/creative/register`)}
               >
                 クリエイティブを追加する
               </Button>
