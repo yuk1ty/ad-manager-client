@@ -14,6 +14,7 @@ import {
   Box,
   Tooltip,
   Fab,
+  Switch,
 } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import { SessionRepository } from "../../../context/session";
@@ -85,6 +86,18 @@ export function AdView() {
       .then((res) => history.goBack());
   }
 
+  async function switchDelivery() {
+    let nextState;
+    if (ad.deliverySwitch === 0) {
+      nextState = 1;
+    } else {
+      nextState = 0;
+    }
+    await axios(session).patch(`/ads/${id}/delivery-switch`, {
+      switch: nextState,
+    });
+  }
+
   return (
     <>
       <Header />
@@ -105,6 +118,28 @@ export function AdView() {
             </Fab>
           </Tooltip>
         </Box>
+        <Grid container spacing={0} className={classes.adMenu}>
+          <Grid item xs={9}></Grid>
+          <Grid item xs={3}>
+            {ad.deliverySwitch === 0 ? (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => switchDelivery()}
+              >
+                配信を ON にする
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => switchDelivery()}
+              >
+                配信を OFF にする
+              </Button>
+            )}
+          </Grid>
+        </Grid>
         <Paper elevation={3} className={classes.inner}>
           <Grid container spacing={3}>
             <Grid item xs={3}>
