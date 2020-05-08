@@ -90,7 +90,7 @@ export function AdGroupEdit() {
     };
 
     await axios(session)
-      .post(`/campaigns/${id}/ad-groups`, adGroup)
+      .patch(`/ad-groups/${id}`, adGroup)
       .then((res) => {
         history.goBack();
       });

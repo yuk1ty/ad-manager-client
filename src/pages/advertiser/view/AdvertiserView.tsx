@@ -14,12 +14,16 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  Box,
+  Tooltip,
+  Fab,
 } from "@material-ui/core";
 import { SessionRepository } from "../../../context/session";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useHistory } from "react-router-dom";
 import { useAxios } from "../../../context/axios";
 import { AdvertiserData } from "../../../context/types";
 import { DeliveryStatusBadge } from "../../../components/badges/DeliveryStatusBadge";
+import { Edit, Delete } from "@material-ui/icons";
 
 const userStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,6 +33,14 @@ const userStyles = makeStyles((theme: Theme) =>
     },
     title: {
       padding: theme.spacing(0, 0, 3, 0),
+    },
+    absolute: {
+      position: "fixed",
+      bottom: theme.spacing(2),
+      right: theme.spacing(3),
+    },
+    opsBtn: {
+      right: theme.spacing(2),
     },
   })
 );
@@ -54,6 +66,7 @@ export function AdvertiserView() {
   const session = repository.session();
   const axios = useAxios;
   const classes = userStyles();
+  const history = useHistory();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -72,10 +85,36 @@ export function AdvertiserView() {
     fetchData();
   }, [id, axios, session]);
 
+  function transitToEditPage() {
+    history.push(`/advertisers/${id}/edit`);
+  }
+
+  async function removeAdvertiser() {
+    await axios(session)
+      .delete(`/advertisers/${id}`)
+      .then((res) => history.push(`/advertisers/${id}/view`));
+  }
+
   return (
     <>
       <Header />
       <StandardLayout title="広告主">
+        <Box className={classes.absolute} component="div">
+          <Tooltip title="編集" aria-label="add">
+            <Fab
+              color="default"
+              className={classes.opsBtn}
+              onClick={transitToEditPage}
+            >
+              <Edit />
+            </Fab>
+          </Tooltip>
+          <Tooltip title="削除" aria-label="add">
+            <Fab color="secondary" onClick={removeAdvertiser}>
+              <Delete />
+            </Fab>
+          </Tooltip>
+        </Box>
         <Paper elevation={3} className={classes.inner}>
           <Grid container spacing={3}>
             <Grid item xs={3}>
