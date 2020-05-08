@@ -134,7 +134,7 @@ export function AdGroupView() {
             <Button
               variant="contained"
               color="primary"
-              onClick={() => history.push(`/ad-groups/${id}/ad/register`)}
+              onClick={() => history.push(`/ad-groups/${id}/ads/register`)}
             >
               広告を追加する
             </Button>
