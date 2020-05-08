@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch } from "react-router-dom";
 import { Dashboard } from "./pages/dashboard/Dashboard";
 import { Login } from "./pages/login/Login";
 import { UserList } from "./pages/users/UserList";
@@ -23,6 +23,7 @@ import { CampaignRegister } from "./pages/campaigns/register/CampaignRegister";
 import { CampaignEdit } from "./pages/campaigns/edit/CampaignEdit";
 import { AdGroupRegister } from "./pages/adGroups/register/AdGroupRegister";
 import { AdGroupView } from "./pages/adGroups/view/AdGroupView";
+import { AdView } from "./pages/ads/view/AdView";
 
 function App() {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -89,6 +90,7 @@ function App() {
               path="/campaigns/:id/ad-groups/register"
               children={<AdGroupRegister />}
             />
+            <PrivateRoute path="/ads/:id/view" children={<AdView />} />
             <PrivateRoute path="/" children={<Dashboard />} />
           </Switch>
         </div>

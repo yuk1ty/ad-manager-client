@@ -58,6 +58,21 @@ export interface AdTableData {
 export interface Creative {
   id: number;
   name: string;
+  creativeType: {
+    width: number;
+    height: number;
+    fileSize: number;
+    mime: string;
+  };
+  url: string;
 }
 
-export interface AdData {}
+export interface AdData {
+  id: number;
+  name: string;
+  landingPageUrl: string;
+  deliverySwitch: number;
+  creative: Creative | null;
+  createdAt: string;
+  updatedAt: string;
+}
