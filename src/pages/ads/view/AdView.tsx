@@ -12,11 +12,14 @@ import {
   Typography,
   Button,
   Box,
+  Tooltip,
+  Fab,
 } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import { SessionRepository } from "../../../context/session";
 import { useAxios } from "../../../context/axios";
 import { DeliverySwitchBadge } from "../../../components/badges/DeliverySwitchBadge";
+import { Edit, Delete } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -30,6 +33,14 @@ const useStyles = makeStyles((theme: Theme) =>
     adMenu: {
       textAlign: "right",
       margin: theme.spacing(0, 0, 2, 0),
+    },
+    absolute: {
+      position: "fixed",
+      bottom: theme.spacing(2),
+      right: theme.spacing(3),
+    },
+    opsBtn: {
+      right: theme.spacing(2),
     },
   })
 );
@@ -64,10 +75,36 @@ export function AdView() {
     // fetchAds();
   }, [id, axios, session]);
 
+  function transitToEditPage() {
+    history.push(`/ads/${id}/edit`);
+  }
+
+  async function removeAd() {
+    await axios(session)
+      .delete(`/ads/${id}`)
+      .then((res) => history.goBack());
+  }
+
   return (
     <>
       <Header />
-      <StandardLayout title="広告グループ詳細">
+      <StandardLayout title="広告詳細">
+        <Box className={classes.absolute} component="div">
+          <Tooltip title="編集" aria-label="add">
+            <Fab
+              color="default"
+              className={classes.opsBtn}
+              onClick={transitToEditPage}
+            >
+              <Edit />
+            </Fab>
+          </Tooltip>
+          <Tooltip title="削除" aria-label="add">
+            <Fab color="secondary" onClick={removeAd}>
+              <Delete />
+            </Fab>
+          </Tooltip>
+        </Box>
         <Paper elevation={3} className={classes.inner}>
           <Grid container spacing={3}>
             <Grid item xs={3}>
@@ -113,10 +150,10 @@ export function AdView() {
           保有クリエイティブ
         </Typography>
 
-        {creative == null ? (
-          <Grid container spacing={0} className={classes.adMenu}>
-            <Grid item xs={9}></Grid>
-            <Grid item xs={3}>
+        <Grid container spacing={0} className={classes.adMenu}>
+          <Grid item xs={9}></Grid>
+          <Grid item xs={3}>
+            {creative == null ? (
               <Button
                 variant="contained"
                 color="primary"
@@ -124,11 +161,17 @@ export function AdView() {
               >
                 クリエイティブを追加する
               </Button>
-            </Grid>
+            ) : (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => history.push(`/ads/${id}/creative/register`)}
+              >
+                クリエイティブを再登録する
+              </Button>
+            )}
           </Grid>
-        ) : (
-          <div></div>
-        )}
+        </Grid>
         <Paper elevation={3} className={classes.inner}>
           {creative === null ? (
             <Alert severity="warning">クリエイティブが登録されていません</Alert>

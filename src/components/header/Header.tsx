@@ -10,6 +10,12 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: theme.spacing(2),
     },
   },
+  logo: {
+    marginRight: theme.spacing(3),
+  },
+  naviMenuLink: {
+    cursor: "pointer",
+  },
 }));
 
 export function Header() {
@@ -22,7 +28,7 @@ export function Header() {
     <>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" className={classes.root}>
+          <Typography variant="h6" className={classes.logo}>
             Ad Manager
           </Typography>
           <Typography className={classes.root}>
@@ -31,24 +37,28 @@ export function Header() {
                 <Link
                   onClick={() => history.push("/users/list")}
                   color="inherit"
+                  className={classes.naviMenuLink}
                 >
                   ユーザー管理
                 </Link>
                 <Link
                   onClick={() => history.push("/agencies/list")}
                   color="inherit"
+                  className={classes.naviMenuLink}
                 >
                   代理店管理
                 </Link>
                 <Link
                   onClick={() => history.push("/advertisers/list")}
                   color="inherit"
+                  className={classes.naviMenuLink}
                 >
                   広告主管理
                 </Link>
                 <Link
                   onClick={() => history.push("/campaigns/list")}
                   color="inherit"
+                  className={classes.naviMenuLink}
                 >
                   キャンペーン管理
                 </Link>

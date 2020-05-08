@@ -113,18 +113,32 @@ export function CampaignView() {
     return campaign.deliveryStatus === 4;
   }
 
+  function transitToEditPage() {
+    history.push(`/campaigns/${id}/edit`);
+  }
+
+  async function removeCampaign() {
+    await axios(session)
+      .delete(`/campaigns/${id}`)
+      .then((res) => history.push("/campaigns/list"));
+  }
+
   return (
     <>
       <Header />
       <StandardLayout title="キャンペーン詳細">
         <Box className={classes.absolute} component="div">
           <Tooltip title="編集" aria-label="add">
-            <Fab color="default" className={classes.opsBtn}>
+            <Fab
+              color="default"
+              className={classes.opsBtn}
+              onClick={transitToEditPage}
+            >
               <Edit />
             </Fab>
           </Tooltip>
           <Tooltip title="削除" aria-label="add">
-            <Fab color="secondary">
+            <Fab color="secondary" onClick={removeCampaign}>
               <Delete />
             </Fab>
           </Tooltip>
@@ -210,6 +224,18 @@ export function CampaignView() {
               {campaign.deliveryEndAt}
               {" まで"}
             </Grid>
+            <Grid item xs={3}>
+              作成日時
+            </Grid>
+            <Grid item xs={9}>
+              {campaign.createdAt}
+            </Grid>
+            <Grid item xs={3}>
+              更新日時
+            </Grid>
+            <Grid item xs={9}>
+              {campaign.updatedAt}
+            </Grid>
           </Grid>
         </Paper>
 
@@ -236,8 +262,7 @@ export function CampaignView() {
               <TableRow>
                 <TableCell>#</TableCell>
                 <TableCell>広告グループ名</TableCell>
-                <TableCell>配信開始日</TableCell>
-                <TableCell>配信終了日</TableCell>
+                <TableCell>配信期間</TableCell>
                 <TableCell>作成日時</TableCell>
               </TableRow>
             </TableHead>
@@ -251,8 +276,11 @@ export function CampaignView() {
                         {adGroup.name}
                       </Link>
                     </TableCell>
-                    <TableCell>{adGroup.deliveryStartAt}</TableCell>
-                    <TableCell>{adGroup.deliveryEndAt}</TableCell>
+                    <TableCell>
+                      {adGroup.deliveryStartAt}
+                      {" 〜 "}
+                      {adGroup.deliveryEndAt}
+                    </TableCell>
                     <TableCell>{adGroup.createdAt}</TableCell>
                   </TableRow>
                 ))}

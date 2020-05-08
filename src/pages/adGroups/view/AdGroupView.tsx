@@ -17,10 +17,14 @@ import {
   TableCell,
   TableBody,
   Button,
+  Box,
+  Tooltip,
+  Fab,
 } from "@material-ui/core";
 import { SessionRepository } from "../../../context/session";
 import { useAxios } from "../../../context/axios";
 import { DeliverySwitchBadge } from "../../../components/badges/DeliverySwitchBadge";
+import { Edit, Delete } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,6 +38,14 @@ const useStyles = makeStyles((theme: Theme) =>
     adMenu: {
       textAlign: "right",
       margin: theme.spacing(0, 0, 2, 0),
+    },
+    absolute: {
+      position: "fixed",
+      bottom: theme.spacing(2),
+      right: theme.spacing(3),
+    },
+    opsBtn: {
+      right: theme.spacing(2),
     },
   })
 );
@@ -77,10 +89,36 @@ export function AdGroupView() {
     }
   }
 
+  function transitToEditPage() {
+    history.push(`/ad-groups/${id}/edit`);
+  }
+
+  async function removeCampaign() {
+    await axios(session)
+      .delete(`/ad-groups/${id}`)
+      .then((res) => history.goBack());
+  }
+
   return (
     <>
       <Header />
       <StandardLayout title="広告グループ詳細">
+        <Box className={classes.absolute} component="div">
+          <Tooltip title="編集" aria-label="add">
+            <Fab
+              color="default"
+              className={classes.opsBtn}
+              onClick={transitToEditPage}
+            >
+              <Edit />
+            </Fab>
+          </Tooltip>
+          <Tooltip title="削除" aria-label="add">
+            <Fab color="secondary" onClick={removeCampaign}>
+              <Delete />
+            </Fab>
+          </Tooltip>
+        </Box>
         <Paper elevation={3} className={classes.inner}>
           <Grid container spacing={3}>
             <Grid item xs={3}>
@@ -121,6 +159,18 @@ export function AdGroupView() {
             </Grid>
             <Grid item xs={9}>
               {/* もし可能なら、ダイアログで登録したセグメントを表示できるようにしたい */}
+            </Grid>
+            <Grid item xs={3}>
+              作成日時
+            </Grid>
+            <Grid item xs={9}>
+              {adGroup.createdAt}
+            </Grid>
+            <Grid item xs={3}>
+              更新日時
+            </Grid>
+            <Grid item xs={9}>
+              {adGroup.updatedAt}
             </Grid>
           </Grid>
         </Paper>
