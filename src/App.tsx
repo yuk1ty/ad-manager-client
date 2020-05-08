@@ -26,6 +26,7 @@ import { AdGroupView } from "./pages/adGroups/view/AdGroupView";
 import { AdView } from "./pages/ads/view/AdView";
 import { AdRegister } from "./pages/ads/register/AdRegister";
 import { CreativeRegister } from "./pages/creatives/register/CreativeRegister";
+import { AdGroupEdit } from "./pages/adGroups/edit/AdGroupEdit";
 
 function App() {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -87,6 +88,10 @@ function App() {
             <PrivateRoute
               path="/ad-groups/:id/view"
               children={<AdGroupView />}
+            />
+            <PrivateRoute
+              path="/ad-groups/:id/edit"
+              children={<AdGroupEdit />}
             />
             <PrivateRoute
               path="/campaigns/:id/ad-groups/register"
