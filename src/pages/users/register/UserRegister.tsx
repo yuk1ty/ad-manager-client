@@ -89,6 +89,10 @@ export function UserRegister() {
       .post("/users", user)
       .then((res) => {
         history.push("/users/list");
+      })
+      .catch((err) => {
+        const res = err.response;
+        setErrors(res.data.errors);
       });
   }
 

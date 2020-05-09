@@ -17,9 +17,11 @@ import {
 } from "@material-ui/core";
 import { DeliveryStatusBadge } from "../../../components/badges/DeliveryStatusBadge";
 import { TableSideOperations } from "../../../components/operations/TableSideOperations";
+import { ErrorAlert } from "../../../components/error/ErrorAlert";
 
 export function CampaignList() {
   const [campaigns, setCampaigns] = useState<CampaignData[]>([]);
+  const [errors, setErrors] = useState<string[]>([]);
   const history = useHistory();
   const repository = SessionRepository();
   const session = repository.session();
@@ -49,6 +51,10 @@ export function CampaignList() {
       .then((res) => {
         const result = campaigns.filter((item) => campaign.id !== item.id);
         setCampaigns(result);
+      })
+      .catch((err) => {
+        const res = err.response;
+        setErrors(res.data.errors);
       });
   }
 
@@ -56,6 +62,7 @@ export function CampaignList() {
     <>
       <Header />
       <StandardLayout title="キャンペーン一覧">
+        <ErrorAlert errors={errors} />
         <RegisterStickyButtons onClick={transitToRegisterPage} />
         <TableContainer component={Paper}>
           <Table aria-label="table">

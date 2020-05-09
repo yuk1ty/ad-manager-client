@@ -17,6 +17,7 @@ import { SessionRepository } from "../../../context/session";
 import { useAxios } from "../../../context/axios";
 import { useHistory, useParams } from "react-router-dom";
 import { AdvertiserData } from "../../../context/types";
+import { ErrorAlert } from "../../../components/error/ErrorAlert";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -44,10 +45,11 @@ export function CampaignEdit() {
   const [monthlyBudgetLimit, setMonthlyBudgetLimit] = useState(0);
   const [dailyBudgetUpperLimit, setDailyBudgetUpperLimit] = useState(0);
   const [charge, setCharge] = useState(0); // TODO なんか動いてないっぽいのであとで調査
-  const [deliveryStartAt, setDeliveryStartAt] = useState("2020-05-01T00:00");
-  const [deliveryEndAt, setDeliveryEndAt] = useState("2020-05-01T00:00");
+  const [deliveryStartAt, setDeliveryStartAt] = useState("");
+  const [deliveryEndAt, setDeliveryEndAt] = useState("");
   const [advertisers, setAdvertisers] = useState<AdvertiserData[]>([]);
   const [selectedAdvertiser, setSelectedAdvertiser] = useState<number>(1);
+  const [errors, setErrors] = useState<string[]>([]);
   const repository = SessionRepository();
   const session = repository.session();
   const axios = useAxios;
@@ -68,7 +70,6 @@ export function CampaignEdit() {
     const campaign = {
       name: name,
       deliveryStatus: 1, // 一旦作成時は 1 で送る。
-      billingType: 1,
       monthlyBudgetLimit: monthlyBudgetLimit,
       dailyBudgetUpperLimit: dailyBudgetUpperLimit,
       chage: charge,
@@ -82,6 +83,10 @@ export function CampaignEdit() {
       .then((res) => {
         const campaign = res.data;
         history.push(`/campaigns/${campaign.id}/view`);
+      })
+      .catch((err) => {
+        const res = err.response;
+        setErrors(res.data.errors);
       });
   }
 
@@ -89,6 +94,7 @@ export function CampaignEdit() {
     <>
       <Header />
       <StandardLayout title="キャンペーン編集">
+        <ErrorAlert errors={errors} />
         <Paper elevation={3} className={classes.root}>
           <form onSubmit={onSubmit} className={classes.root}>
             <TextField

@@ -51,7 +51,7 @@ export function AdvertiserRegister() {
     };
     await axios(session)
       .post("/advertisers", advertiser)
-      .then((res) => history.push("/advertisers/list"));
+      .then((res) => history.push(`/advertisers/${res.data.id}/view`));
   }
 
   return (

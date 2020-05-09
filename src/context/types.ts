@@ -15,6 +15,9 @@ export interface AdvertiserData {
   id: number;
   name: string;
   domain: string;
+  agencyName: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface CampaignData {

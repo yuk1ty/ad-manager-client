@@ -24,6 +24,7 @@ import { useAxios } from "../../../context/axios";
 import { AdvertiserData } from "../../../context/types";
 import { DeliveryStatusBadge } from "../../../components/badges/DeliveryStatusBadge";
 import { Edit, Delete } from "@material-ui/icons";
+import { ErrorAlert } from "../../../components/error/ErrorAlert";
 
 const userStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -60,8 +61,12 @@ export function AdvertiserView() {
     id: 0,
     name: "",
     domain: "",
+    agencyName: "",
+    createdAt: "",
+    updatedAt: "",
   });
   const [campaigns, setCampaigns] = useState<CampaignTableData[]>([]);
+  const [errors, setErrors] = useState<string[]>([]);
   const repository = SessionRepository();
   const session = repository.session();
   const axios = useAxios;
@@ -70,17 +75,16 @@ export function AdvertiserView() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios(session).get(`/advertisers/${id}`);
-      setAdvertiser(result.data);
-    };
-    fetchData();
-  }, [id, axios, session]);
-
-  useEffect(() => {
-    // TODO たぶんこちらは1つにまとめられるので、1回の取得で十分
-    const fetchData = async () => {
-      const result = await axios(session).get(`/advertisers/${id}/campaigns`);
-      setCampaigns(result.data);
+      await axios(session)
+        .get(`/advertisers/${id}`)
+        .then((res) => {
+          setAdvertiser(res.data);
+          setCampaigns(res.data.campaigns);
+        })
+        .catch((err) => {
+          const res = err.response;
+          setErrors(res.errors);
+        });
     };
     fetchData();
   }, [id, axios, session]);
@@ -99,6 +103,7 @@ export function AdvertiserView() {
     <>
       <Header />
       <StandardLayout title="広告主">
+        <ErrorAlert errors={errors} />
         <Box className={classes.absolute} component="div">
           <Tooltip title="編集" aria-label="add">
             <Fab
@@ -134,6 +139,24 @@ export function AdvertiserView() {
             </Grid>
             <Grid item xs={9}>
               {advertiser.domain}
+            </Grid>
+            <Grid item xs={3}>
+              代理店名
+            </Grid>
+            <Grid item xs={9}>
+              {advertiser.agencyName}
+            </Grid>
+            <Grid item xs={3}>
+              作成日時
+            </Grid>
+            <Grid item xs={9}>
+              {advertiser.createdAt}
+            </Grid>
+            <Grid item xs={3}>
+              更新日時
+            </Grid>
+            <Grid item xs={9}>
+              {advertiser.updatedAt}
             </Grid>
           </Grid>
         </Paper>

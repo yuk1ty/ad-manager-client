@@ -14,6 +14,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { SessionRepository } from "../../../context/session";
 import { useAxios } from "../../../context/axios";
 import { useDropzone } from "react-dropzone";
+import { ErrorAlert } from "../../../components/error/ErrorAlert";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -49,9 +50,11 @@ export function AdGroupEdit() {
   const [name, setName] = useState("");
   const [monthlyBudget, setMonthlyBudget] = useState(0);
   const [dailyBudget, setDailyBudget] = useState(0);
-  const [deliveryStartAt, setDeliveryStartAt] = useState("2020-05-01T00:00");
-  const [deliveryEndAt, setDeliveryEndAt] = useState("2020-05-01T00:00");
+  const [deliveryStartAt, setDeliveryStartAt] = useState("");
+  const [deliveryEndAt, setDeliveryEndAt] = useState("");
   const [segmentName, setSegmentName] = useState("");
+  const [errors, setErrors] = useState<string[]>([]);
+
   const classes = useStyles();
   const repository = SessionRepository();
   const session = repository.session();
@@ -93,6 +96,10 @@ export function AdGroupEdit() {
       .patch(`/ad-groups/${id}`, adGroup)
       .then((res) => {
         history.goBack();
+      })
+      .catch((err) => {
+        const res = err.response;
+        setErrors(res.data.errors);
       });
   }
 
@@ -100,6 +107,7 @@ export function AdGroupEdit() {
     <>
       <Header />
       <StandardLayout title="広告グループ編集">
+        <ErrorAlert errors={errors} />
         <Paper elevation={3} className={classes.root}>
           <form onSubmit={onSubmit} className={classes.root}>
             <TextField

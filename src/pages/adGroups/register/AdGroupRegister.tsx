@@ -14,6 +14,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { SessionRepository } from "../../../context/session";
 import { useAxios } from "../../../context/axios";
 import { useDropzone } from "react-dropzone";
+import { ErrorAlert } from "../../../components/error/ErrorAlert";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -52,6 +53,8 @@ export function AdGroupRegister() {
   const [deliveryStartAt, setDeliveryStartAt] = useState("2020-05-01T00:00");
   const [deliveryEndAt, setDeliveryEndAt] = useState("2020-05-01T00:00");
   const [segmentName, setSegmentName] = useState("");
+  const [errors, setErrors] = useState<string[]>([]);
+
   const classes = useStyles();
   const repository = SessionRepository();
   const session = repository.session();
@@ -93,6 +96,10 @@ export function AdGroupRegister() {
       .post(`/campaigns/${id}/ad-groups`, adGroup)
       .then((res) => {
         history.goBack();
+      })
+      .catch((err) => {
+        const res = err.response;
+        setErrors(res.data.errors);
       });
   }
 
@@ -100,6 +107,7 @@ export function AdGroupRegister() {
     <>
       <Header />
       <StandardLayout title="広告グループ登録">
+        <ErrorAlert errors={errors} />
         <Paper elevation={3} className={classes.root}>
           <form onSubmit={onSubmit} className={classes.root}>
             <TextField

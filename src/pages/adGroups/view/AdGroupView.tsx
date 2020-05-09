@@ -25,6 +25,7 @@ import { SessionRepository } from "../../../context/session";
 import { useAxios } from "../../../context/axios";
 import { DeliverySwitchBadge } from "../../../components/badges/DeliverySwitchBadge";
 import { Edit, Delete } from "@material-ui/icons";
+import { ErrorAlert } from "../../../components/error/ErrorAlert";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -65,6 +66,7 @@ export function AdGroupView() {
     updatedAt: "",
   });
   const [ads, setAds] = useState<AdTableData[]>([]);
+  const [errors, setErrors] = useState<string[]>([]);
 
   const repository = SessionRepository();
   const session = repository.session();
@@ -74,9 +76,16 @@ export function AdGroupView() {
 
   useEffect(() => {
     const fetchCampaignData = async () => {
-      const result = await axios(session).get(`/ad-groups/${id}`);
-      setAdGroup(result.data);
-      setAds(result.data.ads);
+      await axios(session)
+        .get(`/ad-groups/${id}`)
+        .then((res) => {
+          setAdGroup(res.data);
+          setAds(res.data.ads);
+        })
+        .catch((err) => {
+          const res = err.response;
+          setErrors(res.data.errors);
+        });
     };
     fetchCampaignData();
   }, [id, axios, session]);
@@ -96,13 +105,18 @@ export function AdGroupView() {
   async function removeCampaign() {
     await axios(session)
       .delete(`/ad-groups/${id}`)
-      .then((res) => history.goBack());
+      .then((res) => history.goBack())
+      .catch((err) => {
+        const res = err.response;
+        setErrors(res.data.errors);
+      });
   }
 
   return (
     <>
       <Header />
       <StandardLayout title="広告グループ詳細">
+        <ErrorAlert errors={errors} />
         <Box className={classes.absolute} component="div">
           <Tooltip title="編集" aria-label="add">
             <Fab

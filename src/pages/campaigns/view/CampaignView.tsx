@@ -113,6 +113,10 @@ export function CampaignView() {
     return campaign.deliveryStatus === 4;
   }
 
+  function isNotStarted(): boolean {
+    return campaign.deliveryStatus === 2;
+  }
+
   function transitToEditPage() {
     history.push(`/campaigns/${id}/edit`);
   }
@@ -171,6 +175,20 @@ export function CampaignView() {
             </Grid>
           </Grid>
         )}
+        {isNotStarted() && (
+          <Grid container spacing={0} className={classes.menu}>
+            <Grid item xs={9}></Grid>
+            <Grid item xs={3} alignItems="flex-end">
+              <Button
+                variant="contained"
+                color="default"
+                onClick={(e) => changeDeliveryStatus(e, 3)}
+              >
+                配信開始
+              </Button>
+            </Grid>
+          </Grid>
+        )}
         <Paper elevation={3} className={classes.inner}>
           <Grid container spacing={3}>
             <Grid item xs={3}>
@@ -190,12 +208,6 @@ export function CampaignView() {
             </Grid>
             <Grid item xs={9}>
               <DeliveryStatusBadge status={campaign.deliveryStatus} />
-            </Grid>
-            <Grid item xs={3}>
-              請求タイプ
-            </Grid>
-            <Grid item xs={9}>
-              {campaign.billingType}
             </Grid>
             <Grid item xs={3}>
               月予算

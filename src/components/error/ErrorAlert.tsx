@@ -17,6 +17,15 @@ const useStyles = makeStyles((theme: Theme) =>
 export function ErrorAlert(props: ErrorAlertProps) {
   const classes = useStyles();
 
+  // エラーのボディがなかったとき用
+  if (props.errors === undefined) {
+    return (
+      <Alert severity="error" className={classes.errorAlert}>
+        ブラウザのネットワークタブを確認してください
+      </Alert>
+    );
+  }
+
   if (props.errors.length !== 0) {
     return (
       <Alert severity="error" className={classes.errorAlert}>
