@@ -16,9 +16,11 @@ import {
 import { useHistory, Link } from "react-router-dom";
 import { RegisterStickyButtons } from "../../../components/operations/RegisterStickyButtons";
 import { TableSideOperations } from "../../../components/operations/TableSideOperations";
+import { ErrorAlert } from "../../../components/error/ErrorAlert";
 
 export function AdvertiserList() {
   const [advertisers, setAdvertisers] = useState<AdvertiserData[]>([]);
+  const [errors, setErrors] = useState<string[]>([]);
   const history = useHistory();
   const repository = SessionRepository();
   const session = repository.session();
@@ -26,8 +28,15 @@ export function AdvertiserList() {
 
   useEffect(() => {
     const fetchAdvertiserData = async () => {
-      const result = await axios(session).get("/advertisers");
-      setAdvertisers(result.data);
+      await axios(session)
+        .get("/advertisers")
+        .then((res) => {
+          setAdvertisers(res.data);
+        })
+        .catch((err) => {
+          const res = err.response;
+          setErrors(res.data.errors);
+        });
     };
     fetchAdvertiserData();
   }, [axios, session]);
@@ -51,6 +60,10 @@ export function AdvertiserList() {
       .then((res) => {
         const result = advertisers.filter((item) => advertiser.id !== item.id);
         setAdvertisers(result);
+      })
+      .catch((err) => {
+        const res = err.response;
+        setErrors(res.data.errors);
       });
   }
 
@@ -58,6 +71,7 @@ export function AdvertiserList() {
     <>
       <Header />
       <StandardLayout title="広告主一覧">
+        <ErrorAlert errors={errors} />
         <RegisterStickyButtons onClick={transitToRegisterPage} />
         <TableContainer component={Paper}>
           <Table aria-label="table">

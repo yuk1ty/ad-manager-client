@@ -20,6 +20,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { AgencyData } from "../../../context/types";
 import { useAxios } from "../../../context/axios";
 import { SessionRepository } from "../../../context/session";
+import { ErrorAlert } from "../../../components/error/ErrorAlert";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -53,20 +54,36 @@ export function UserEdit() {
   const [selectedAgency, setSelectedAgency] = useState<unknown>();
   const [agencies, setAgencies] = useState<AgencyData[]>([]);
   const [role, setRole] = useState(2);
+  const [errors, setErrors] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const result = (await axios(session).get(`/users/${id}`)).data;
-      setName(result.name);
-      setAddress(result.emailAddress);
-      setSelectedAgency(result.agency.id); // TODO
-      setRole(result.role);
+      await axios(session)
+        .get(`/users/${id}`)
+        .then((res) => {
+          const result = res.data;
+          setName(result.name);
+          setAddress(result.emailAddress);
+          setSelectedAgency(result.agency.id); // TODO
+          setRole(result.role);
+        })
+        .catch((err) => {
+          const res = err.response;
+          setErrors(res.data.errors);
+        });
     };
     fetchUserData();
 
     const fetchAgencyData = async () => {
-      const result = await axios(session).get("/agencies");
-      setAgencies(result.data);
+      await axios(session)
+        .get("/agencies")
+        .then((res) => {
+          setAgencies(res.data);
+        })
+        .catch((err) => {
+          const res = err.response;
+          setErrors(res.data.errors);
+        });
     };
     fetchAgencyData();
   }, [id, axios, session]);
@@ -93,6 +110,7 @@ export function UserEdit() {
     <>
       <Header />
       <StandardLayout title="ユーザー編集">
+        <ErrorAlert errors={errors} />
         <Paper elevation={3} className="user-register-form">
           <form onSubmit={onSubmit} className={classes.root}>
             <TextField

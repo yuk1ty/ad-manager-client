@@ -9,6 +9,9 @@ import {
   TableRow,
   TableCell,
   TableBody,
+  Theme,
+  makeStyles,
+  createStyles,
 } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import { UserData } from "../../context/types";
@@ -17,9 +20,11 @@ import { SessionRepository } from "../../context/session";
 import { AuthorityBadge } from "../../components/badges/AuthorityBadge";
 import { RegisterStickyButtons } from "../../components/operations/RegisterStickyButtons";
 import { TableSideOperations } from "../../components/operations/TableSideOperations";
+import { ErrorAlert } from "../../components/error/ErrorAlert";
 
 export function UserList() {
   const [users, setUsers] = useState<UserData[]>([]);
+  const [errors, setErrors] = useState<string[]>([]);
   const history = useHistory();
   const repository = SessionRepository();
   const session = repository.session();
@@ -27,8 +32,15 @@ export function UserList() {
 
   useEffect(() => {
     const fetchTableData = async () => {
-      const result = await axios(session).get("/users");
-      setUsers(result.data);
+      await axios(session)
+        .get("/users")
+        .then((res) => {
+          setUsers(res.data);
+        })
+        .catch((err) => {
+          const res = err.response;
+          setErrors(res.data.errors);
+        });
     };
     fetchTableData();
   }, [axios, session]); // TODO
@@ -56,6 +68,7 @@ export function UserList() {
     <>
       <Header />
       <StandardLayout title="ユーザー一覧">
+        <ErrorAlert errors={errors} />
         <RegisterStickyButtons onClick={transitToRegisterPage} />
         <TableContainer component={Paper}>
           <Table aria-label="table">

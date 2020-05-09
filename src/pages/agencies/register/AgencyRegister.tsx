@@ -7,6 +7,7 @@ import { StandardLayout } from "../../../components/context/StandardLayout";
 import { Paper, TextField, Button } from "@material-ui/core";
 import { SessionRepository } from "../../../context/session";
 import { useAxios } from "../../../context/axios";
+import { ErrorAlert } from "../../../components/error/ErrorAlert";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,6 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export function AgencyRegister() {
   const [name, setName] = useState("");
+  const [errors, setErrors] = useState<string[]>([]);
   const repository = SessionRepository();
   const session = repository.session();
   const axios = useAxios;
@@ -45,6 +47,10 @@ export function AgencyRegister() {
       .post("/agencies", agency)
       .then((res) => {
         history.push("/agencies/list");
+      })
+      .catch((err) => {
+        const res = err.response;
+        setErrors(res.data.errors);
       });
   }
 
@@ -52,6 +58,7 @@ export function AgencyRegister() {
     <>
       <Header />
       <StandardLayout title="代理店登録">
+        <ErrorAlert errors={errors} />
         <Paper elevation={3} className="agency-register-form">
           <form onSubmit={onSubmit} className={classes.root}>
             <TextField

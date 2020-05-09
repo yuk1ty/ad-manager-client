@@ -6,6 +6,7 @@ import { Paper, TextField, Button } from "@material-ui/core";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { SessionRepository } from "../../../context/session";
 import { useAxios } from "../../../context/axios";
+import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,6 +24,9 @@ const useStyles = makeStyles((theme: Theme) =>
     submitButton: {
       margin: theme.spacing(2, 0, 1, 0),
     },
+    errorAlert: {
+      margin: theme.spacing(3, 0),
+    },
   })
 );
 
@@ -35,11 +39,19 @@ export function AgencyEdit() {
   const axios = useAxios;
 
   const [name, setName] = useState("");
+  const [errors, setErrors] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchAgencyData = async () => {
-      const result = (await axios(session).get(`/agencies/${id}`)).data;
-      setName(result.name);
+      await axios(session)
+        .get(`/agencies/${id}`)
+        .then((res) => {
+          setName(res.data.name);
+        })
+        .catch((err) => {
+          const res = err.response;
+          setErrors(res.data.errors);
+        });
     };
     fetchAgencyData();
   }, [id, axios, session]);
@@ -60,6 +72,11 @@ export function AgencyEdit() {
     <>
       <Header />
       <StandardLayout title="代理店編集">
+        {errors.length !== 0 && (
+          <Alert severity="error" className={classes.errorAlert}>
+            {errors.map((err) => `${err}\n`)}
+          </Alert>
+        )}
         <Paper elevation={3} className="agency-register-form">
           <form onSubmit={onSubmit} className={classes.root}>
             <TextField

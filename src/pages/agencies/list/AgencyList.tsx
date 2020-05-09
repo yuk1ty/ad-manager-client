@@ -3,7 +3,6 @@ import { useHistory } from "react-router-dom";
 import { Header } from "../../../components/header/Header";
 import { StandardLayout } from "../../../components/context/StandardLayout";
 import {
-  Button,
   TableContainer,
   Paper,
   Table,
@@ -11,32 +10,17 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  makeStyles,
-  Theme,
-  createStyles,
-  Tooltip,
-  Fab,
 } from "@material-ui/core";
-import { Edit, Delete, Add } from "@material-ui/icons";
 import { AgencyData } from "../../../context/types";
 import { SessionRepository } from "../../../context/session";
 import { useAxios } from "../../../context/axios";
 import { RegisterStickyButtons } from "../../../components/operations/RegisterStickyButtons";
 import { TableSideOperations } from "../../../components/operations/TableSideOperations";
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    absolute: {
-      position: "absolute",
-      bottom: theme.spacing(2),
-      right: theme.spacing(3),
-    },
-  })
-);
+import { ErrorAlert } from "../../../components/error/ErrorAlert";
 
 export function AgencyList() {
   const [agencies, setAgencies] = useState<AgencyData[]>([]);
-  const classes = useStyles();
+  const [errors, setErrors] = useState<string[]>([]);
   const history = useHistory();
   const repository = SessionRepository();
   const session = repository.session();
@@ -44,8 +28,13 @@ export function AgencyList() {
 
   useEffect(() => {
     const fetchAgencyData = async () => {
-      const result = await axios(session).get("/agencies");
-      setAgencies(result.data);
+      await axios(session)
+        .get("/agencies")
+        .then((res) => setAgencies(res.data))
+        .catch((err) => {
+          const res = err.response;
+          setErrors(res.data.errors);
+        });
     };
     fetchAgencyData();
   }, [axios, session]);
@@ -73,6 +62,7 @@ export function AgencyList() {
     <>
       <Header />
       <StandardLayout title="代理店一覧">
+        <ErrorAlert errors={errors} />
         <RegisterStickyButtons onClick={transitToRegisterPage} />
         <TableContainer component={Paper}>
           <Table aria-label="table">

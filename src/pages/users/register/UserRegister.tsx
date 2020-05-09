@@ -20,6 +20,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { AgencyData } from "../../../context/types";
 import { useAxios } from "../../../context/axios";
 import { SessionRepository } from "../../../context/session";
+import { ErrorAlert } from "../../../components/error/ErrorAlert";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -49,6 +50,7 @@ export function UserRegister() {
   const [selectedAgency, setSelectedAgency] = useState<unknown>();
   const [agencies, setAgencies] = useState<AgencyData[]>([]);
   const [role, setRole] = useState(2);
+  const [errors, setErrors] = useState<string[]>([]);
   const repository = SessionRepository();
   const session = repository.session();
   const axios = useAxios;
@@ -58,8 +60,13 @@ export function UserRegister() {
 
   useEffect(() => {
     const fetchAgencyData = async () => {
-      const result = await axios(session).get("/agencies");
-      setAgencies(result.data);
+      await axios(session)
+        .get("/agencies")
+        .then((res) => setAgencies(res.data))
+        .catch((err) => {
+          const res = err.response;
+          setErrors(res.data.errors);
+        });
     };
     fetchAgencyData();
   }, [axios, session]);
@@ -89,6 +96,7 @@ export function UserRegister() {
     <>
       <Header />
       <StandardLayout title="ユーザー登録">
+        <ErrorAlert errors={errors} />
         <Paper elevation={3} className="user-register-form">
           <form onSubmit={onSubmit} className={classes.root}>
             <TextField
@@ -116,6 +124,7 @@ export function UserRegister() {
             <TextField
               label="登録用パスワード"
               value={rawPassword}
+              type="password"
               fullWidth
               size="small"
               onChange={(e) => setRawPassword(e.target.value)}
@@ -123,6 +132,7 @@ export function UserRegister() {
             <TextField
               label="確認用パスワード"
               value={confirmPassword}
+              type="password"
               fullWidth
               size="small"
               onChange={(e) => setConfirmPassword(e.target.value)}
