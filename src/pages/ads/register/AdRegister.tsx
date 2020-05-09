@@ -12,6 +12,7 @@ import {
 import { useParams, useHistory } from "react-router-dom";
 import { SessionRepository } from "../../../context/session";
 import { useAxios } from "../../../context/axios";
+import { ErrorAlert } from "../../../components/error/ErrorAlert";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -40,6 +41,8 @@ export function AdRegister() {
   const { id } = useParams();
   const [name, setName] = useState("");
   const [landingPageUrl, setLandingPageUrl] = useState("");
+  const [errors, setErrors] = useState<string[]>([]);
+
   const classes = useStyles();
   const repository = SessionRepository();
   const session = repository.session();
@@ -58,6 +61,10 @@ export function AdRegister() {
       .post(`/ad-groups/${id}/ads`, ad)
       .then((res) => {
         history.goBack();
+      })
+      .catch((err) => {
+        const res = err.response;
+        setErrors(res.data.errors);
       });
   }
 
@@ -65,6 +72,7 @@ export function AdRegister() {
     <>
       <Header />
       <StandardLayout title="広告登録">
+        <ErrorAlert errors={errors} />
         <Paper elevation={3} className={classes.root}>
           <form onSubmit={onSubmit} className={classes.root}>
             <TextField

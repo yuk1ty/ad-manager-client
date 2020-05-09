@@ -12,6 +12,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { SessionRepository } from "../../../context/session";
 import { useAxios } from "../../../context/axios";
 import { useDropzone } from "react-dropzone";
+import { ErrorAlert } from "../../../components/error/ErrorAlert";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -44,6 +45,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export function CreativeRegister() {
   const { id } = useParams();
+  const [errors, setErrors] = useState<string[]>([]);
+
   const classes = useStyles();
   const repository = SessionRepository();
   const session = repository.session();
@@ -69,6 +72,10 @@ export function CreativeRegister() {
       })
       .then((res) => {
         history.goBack();
+      })
+      .catch((err) => {
+        const res = err.response;
+        setErrors(res.data.errors);
       });
   }
 
@@ -76,6 +83,7 @@ export function CreativeRegister() {
     <>
       <Header />
       <StandardLayout title="クリエイティブ登録">
+        <ErrorAlert errors={errors} />
         <Paper elevation={3} className={classes.root}>
           <form onSubmit={onSubmit} className={classes.root}>
             <div {...getRootProps()} className={classes.fileUploadArea}>

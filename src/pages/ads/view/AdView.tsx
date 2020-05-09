@@ -14,13 +14,13 @@ import {
   Box,
   Tooltip,
   Fab,
-  Switch,
 } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import { SessionRepository } from "../../../context/session";
 import { useAxios } from "../../../context/axios";
 import { DeliverySwitchBadge } from "../../../components/badges/DeliverySwitchBadge";
 import { Edit, Delete } from "@material-ui/icons";
+import { ErrorAlert } from "../../../components/error/ErrorAlert";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -58,6 +58,7 @@ export function AdView() {
     updatedAt: "",
   });
   const [creative, setCreative] = useState<Creative | null>(null);
+  const [errors, setErrors] = useState<string[]>([]);
 
   const repository = SessionRepository();
   const session = repository.session();
@@ -67,13 +68,18 @@ export function AdView() {
 
   useEffect(() => {
     const fetchAds = async () => {
-      const result = await axios(session).get(`/ads/${id}`);
-      setAd(result.data);
-      console.log(result.data);
-      setCreative(result.data.creative);
+      await axios(session)
+        .get(`/ads/${id}`)
+        .then((res) => {
+          setAd(res.data);
+          setCreative(res.data.creative);
+        })
+        .catch((err) => {
+          const res = err.response;
+          setErrors(res.data.errors);
+        });
     };
     fetchAds();
-    // fetchAds();
   }, [id, axios, session]);
 
   function transitToEditPage() {
@@ -83,7 +89,11 @@ export function AdView() {
   async function removeAd() {
     await axios(session)
       .delete(`/ads/${id}`)
-      .then((res) => history.goBack());
+      .then((res) => history.goBack())
+      .catch((err) => {
+        const res = err.response;
+        setErrors(res.data.errors);
+      });
   }
 
   async function switchDelivery() {
@@ -102,6 +112,7 @@ export function AdView() {
     <>
       <Header />
       <StandardLayout title="広告詳細">
+        <ErrorAlert errors={errors} />
         <Box className={classes.absolute} component="div">
           <Tooltip title="編集" aria-label="add">
             <Fab
