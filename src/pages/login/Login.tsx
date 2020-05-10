@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, SyntheticEvent } from "react";
 import "./Login.css";
 import { useHistory } from "react-router-dom";
 import {
@@ -53,7 +53,7 @@ export function Login() {
 
   const axios = useAxios();
 
-  const doLogin = async () => {
+  const doLogin = async (e: SyntheticEvent) => {
     await axios
       .post("/sessions", {
         userId: userId,
@@ -78,7 +78,7 @@ export function Login() {
         <Typography component="h1" variant="h5">
           Ad Manager ログイン
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={(e) => doLogin(e)}>
           {errors.length !== 0 &&
             errors.map((err) => (
               <Alert key={err} severity="error">
@@ -115,8 +115,8 @@ export function Login() {
             fullWidth
             variant="contained"
             color="primary"
+            type="submit"
             className={classes.submit}
-            onClick={doLogin}
           >
             ログイン
           </Button>
