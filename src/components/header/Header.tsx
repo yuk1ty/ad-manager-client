@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import "./Header.css";
-import { AppBar, Toolbar, Typography, Link } from "@material-ui/core";
+import { AppBar, Toolbar, Typography, Link, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
+import { SessionRepository } from "../../context/session";
+import { useAxios } from "../../context/axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -16,13 +18,35 @@ const useStyles = makeStyles((theme) => ({
   naviMenuLink: {
     cursor: "pointer",
   },
+  logout: {
+    position: "absolute",
+    right: theme.spacing(2),
+  },
 }));
 
 export function Header() {
   const [auth, setAuth] = useState(true);
 
+  const repository = SessionRepository();
+  const axios = useAxios(repository.session());
+
   const classes = useStyles();
   const history = useHistory();
+
+  async function doLogout() {
+    await axios
+      .delete("/sessions")
+      .then(() => {
+        repository.remove();
+        history.push("/login");
+      })
+      .catch(() => {
+        // エラーになっても消す
+        console.log("来ない？");
+        repository.remove();
+        history.push("/login");
+      });
+  }
 
   return (
     <>
@@ -65,6 +89,13 @@ export function Header() {
               </>
             )}
           </Typography>
+          <Button
+            color="inherit"
+            className={classes.logout}
+            onClick={() => doLogout()}
+          >
+            ログアウト
+          </Button>
         </Toolbar>
       </AppBar>
     </>

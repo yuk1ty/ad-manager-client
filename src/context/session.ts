@@ -25,7 +25,7 @@ export function SessionRepository(): ISessionRepository {
   }
 
   function remove(): void {
-    removeCookie("x-adm-session");
+    removeCookie("x-adm-session", { path: "/" });
   }
 
   return {
