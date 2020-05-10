@@ -66,7 +66,7 @@ export function AdvertiserEdit() {
   return (
     <>
       <Header />
-      <StandardLayout title="広告主登録">
+      <StandardLayout title="広告主編集">
         <Paper elevation={3} className="advertiser-register-form">
           <form onSubmit={onSubmit} className={classes.root}>
             <TextField
@@ -91,7 +91,7 @@ export function AdvertiserEdit() {
               color="primary"
               className={classes.submitButton}
             >
-              広告主を新規登録する
+              広告主を編集する
             </Button>
           </form>
         </Paper>

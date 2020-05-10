@@ -26,6 +26,7 @@ import { AdGroupView } from "./pages/adGroups/view/AdGroupView";
 import { AdView } from "./pages/ads/view/AdView";
 import { AdRegister } from "./pages/ads/register/AdRegister";
 import { CreativeRegister } from "./pages/creatives/register/CreativeRegister";
+import { CreativeReplacer } from "./pages/creatives/register/CreativeReplacer";
 import { AdGroupEdit } from "./pages/adGroups/edit/AdGroupEdit";
 import { AdEdit } from "./pages/ads/edit/AdEdit";
 
@@ -107,6 +108,10 @@ function App() {
             <PrivateRoute
               path="/ads/:id/creative/register"
               children={<CreativeRegister />}
+            />
+            <PrivateRoute
+              path="/ads/:id/creative/replace"
+              children={<CreativeReplacer />}
             />
             <PrivateRoute path="/" children={<Dashboard />} />
           </Switch>

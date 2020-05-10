@@ -219,7 +219,7 @@ export function AdView() {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => history.push(`/ads/${id}/creative/register`)}
+                onClick={() => history.push(`/ads/${id}/creative/replace`)}
               >
                 クリエイティブを再登録する
               </Button>
@@ -247,7 +247,12 @@ export function AdView() {
                 画像
               </Grid>
               <Grid item xs={12}>
-                {creative?.url}
+                <img
+                  src={creative?.url}
+                  width={creative?.creativeType.width}
+                  height={creative?.creativeType.height}
+                  alt={creative?.name}
+                />
               </Grid>
             </Grid>
           )}
