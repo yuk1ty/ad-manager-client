@@ -53,7 +53,6 @@ export function AdEdit() {
     e.preventDefault();
     const ad = {
       name: name,
-      adGroupId: id,
       landingPageUrl: landingPageUrl,
     };
 

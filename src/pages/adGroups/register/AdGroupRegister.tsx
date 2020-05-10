@@ -68,7 +68,7 @@ export function AdGroupRegister() {
     </li>
   ));
 
-  function readFileAsText(file: Blob): Promise<string> {
+  async function readFileAsText(file: File): Promise<string> {
     return new Promise<string>((resolve, reject) => {
       const reader = new FileReader();
       reader.onerror = () => reject(reader.error);
@@ -79,21 +79,26 @@ export function AdGroupRegister() {
 
   async function onSubmit(e: SyntheticEvent) {
     e.preventDefault();
+    if (acceptedFiles.length === 0) {
+      setErrors(["セグメントファイルのアップロードは必須です。"]);
+      return;
+    }
+
     const adGroup = {
       name: name,
-      campaignId: id,
+      campaignId: +id,
       monthlyBudget: monthlyBudget,
       dailyBudget: dailyBudget,
       deliveryStartAt: deliveryStartAt,
       deliveryEndAt: deliveryEndAt,
       segments: {
         name: segmentName,
-        deviceIds: readFileAsText(acceptedFiles[0]),
+        deviceIds: await readFileAsText(acceptedFiles[0]),
       },
     };
 
     await axios(session)
-      .post(`/campaigns/${id}/ad-groups`, adGroup)
+      .post("/ad-groups", adGroup)
       .then((res) => {
         history.push(`/ad-groups/${res.data.id}/view`);
       })

@@ -53,14 +53,14 @@ export function AdRegister() {
     e.preventDefault();
     const ad = {
       name: name,
-      adGroupId: id,
+      adGroupId: +id,
       landingPageUrl: landingPageUrl,
     };
 
     await axios(session)
-      .post(`/ad-groups/${id}/ads`, ad)
+      .post("/ads", ad)
       .then((res) => {
-        history.goBack();
+        history.push(`/ads/${res.data.id}/view`);
       })
       .catch((err) => {
         const res = err.response;
