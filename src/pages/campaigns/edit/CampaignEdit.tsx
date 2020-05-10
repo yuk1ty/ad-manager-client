@@ -58,12 +58,27 @@ export function CampaignEdit() {
   const classes = useStyles();
 
   useEffect(() => {
+    const fetchCampaign = async () => {
+      await axios(session)
+        .get(`/campaigns/${id}`)
+        .then((res) => {
+          setName(res.data.name);
+          setMonthlyBudgetLimit(res.data.monthlyBudgetLimit);
+          setDailyBudgetUpperLimit(res.data.dailyBudgetUpperLimit);
+          setCharge(res.data.charge);
+          setDeliveryStartAt(res.data.deliveryStartAt);
+          setDeliveryEndAt(res.data.deliveryEndAt);
+          setSelectedAdvertiser(res.data.advertiserId);
+        });
+    };
+
     const fetchAdvertiserData = async () => {
       const result = await axios(session).get("/advertisers");
       setAdvertisers(result.data);
     };
+    fetchCampaign();
     fetchAdvertiserData();
-  }, [axios, session]);
+  }, [id, axios, session]);
 
   async function onSubmit(e: SyntheticEvent) {
     e.preventDefault();

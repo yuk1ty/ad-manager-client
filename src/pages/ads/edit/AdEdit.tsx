@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useState } from "react";
+import React, { SyntheticEvent, useState, useEffect } from "react";
 import { Header } from "../../../components/header/Header";
 import { StandardLayout } from "../../../components/context/StandardLayout";
 import {
@@ -68,6 +68,23 @@ export function AdEdit() {
       });
   }
 
+  useEffect(() => {
+    const fetchAd = async () => {
+      await axios(session)
+        .get(`/ads/${id}`)
+        .then((res) => {
+          const ad = res.data;
+          setName(ad.name);
+          setLandingPageUrl(ad.landingPageUrl);
+        })
+        .catch((err) => {
+          const res = err.response;
+          setErrors(res.data.errors);
+        });
+    };
+    fetchAd();
+  });
+
   return (
     <>
       <Header />
@@ -79,6 +96,7 @@ export function AdEdit() {
               label="広告グループ名"
               name="name"
               fullWidth
+              value={name}
               size="small"
               onChange={(e) => setName(e.target.value)}
             />
@@ -86,6 +104,7 @@ export function AdEdit() {
               label="ランディングページ"
               name="landingPageUrl"
               fullWidth
+              value={landingPageUrl}
               size="small"
               onChange={(e) => setLandingPageUrl(e.target.value)}
             />

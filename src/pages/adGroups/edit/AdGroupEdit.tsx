@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useState } from "react";
+import React, { SyntheticEvent, useState, useEffect } from "react";
 import { Header } from "../../../components/header/Header";
 import { StandardLayout } from "../../../components/context/StandardLayout";
 import {
@@ -103,6 +103,27 @@ export function AdGroupEdit() {
       });
   }
 
+  useEffect(() => {
+    const fetchAdGroup = async () => {
+      await axios(session)
+        .get(`/ad-groups/${id}`)
+        .then((res) => {
+          const adGroup = res.data;
+          setName(adGroup.name);
+          setMonthlyBudget(adGroup.monthlyBudget);
+          setDailyBudget(adGroup.dailyBudget);
+          setDeliveryStartAt(adGroup.deliveryStartAt);
+          setDeliveryEndAt(adGroup.deliveryEndAt);
+        })
+        .catch((err) => {
+          const res = err.response;
+          setErrors(res.data.errors);
+        });
+    };
+
+    fetchAdGroup();
+  });
+
   return (
     <>
       <Header />
@@ -114,6 +135,7 @@ export function AdGroupEdit() {
               label="広告グループ名"
               name="name"
               fullWidth
+              value={name}
               size="small"
               onChange={(e) => setName(e.target.value)}
             />
@@ -121,6 +143,7 @@ export function AdGroupEdit() {
               label="月予算"
               name="monthlyBudget"
               fullWidth
+              value={monthlyBudget}
               size="small"
               onChange={(e) => setMonthlyBudget(+e.target.value)}
             />
@@ -128,6 +151,7 @@ export function AdGroupEdit() {
               label="日予算"
               name="dailyBudget"
               fullWidth
+              value={dailyBudget}
               size="small"
               onChange={(e) => setDailyBudget(+e.target.value)}
             />
