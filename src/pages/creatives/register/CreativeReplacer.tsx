@@ -64,6 +64,11 @@ export function CreativeReplacer() {
     const params = new FormData();
     params.append("imageFile", acceptedFiles[0]);
 
+    if (acceptedFiles.length === 0) {
+      setErrors(["画像ファイルは必須です。"]);
+      return;
+    }
+
     await axios(session)
       .patch(`/ads/${id}/creative`, params, {
         headers: {

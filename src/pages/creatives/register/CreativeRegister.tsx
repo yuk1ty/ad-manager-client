@@ -61,6 +61,12 @@ export function CreativeRegister() {
 
   async function onSubmit(e: SyntheticEvent) {
     e.preventDefault();
+
+    if (acceptedFiles.length === 0) {
+      setErrors(["画像ファイルは必須です。"]);
+      return;
+    }
+
     const params = new FormData();
     params.append("imageFile", acceptedFiles[0]);
 
