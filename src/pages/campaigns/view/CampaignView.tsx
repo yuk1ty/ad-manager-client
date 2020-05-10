@@ -278,15 +278,19 @@ export function CampaignView() {
         <Grid container spacing={0} className={classes.adgMenu}>
           <Grid item xs={9}></Grid>
           <Grid item xs={3}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() =>
-                history.push(`/campaigns/${id}/ad-groups/register`)
-              }
-            >
-              広告グループを追加する
-            </Button>
+            {(campaign.deliveryStatus === 1 ||
+              isNotStarted() ||
+              isResumed()) && (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() =>
+                  history.push(`/campaigns/${id}/ad-groups/register`)
+                }
+              >
+                広告グループを追加する
+              </Button>
+            )}
           </Grid>
         </Grid>
         <TableContainer component={Paper}>

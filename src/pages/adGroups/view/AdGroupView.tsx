@@ -152,7 +152,6 @@ export function AdGroupView() {
               キャンペーン名
             </Grid>
             <Grid item xs={9}>
-              {/* campaign.name というように取り出すよう修正する */}
               {adGroup.campaign?.name}
             </Grid>
             <Grid item xs={3}>
