@@ -51,7 +51,7 @@ export function AdView() {
   const [ad, setAd] = useState<AdData>({
     id: 0,
     name: "",
-    adGroupName: "",
+    adGroup: null,
     landingPageUrl: "",
     deliverySwitch: 0,
     creative: null,
@@ -179,7 +179,7 @@ export function AdView() {
             </Grid>
             <Grid item xs={9}>
               {/* adGroup.name というように取り出すよう修正する */}
-              {ad.adGroupName}
+              {ad.adGroup?.name}
             </Grid>
             <Grid item xs={3}>
               ランディングページ

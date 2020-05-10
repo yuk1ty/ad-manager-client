@@ -56,12 +56,12 @@ export function AdGroupView() {
   const [adGroup, setAdGroup] = useState<AdGroupData>({
     id: 0,
     name: "",
-    campaignName: "",
+    campaign: null,
     monthlyBudget: 0,
     dailyBudget: 0,
     deliveryStartAt: "",
     deliveryEndAt: "",
-    segments: [],
+    segment: null,
     ads: [],
     createdAt: "",
     updatedAt: "",
@@ -153,7 +153,7 @@ export function AdGroupView() {
             </Grid>
             <Grid item xs={9}>
               {/* campaign.name というように取り出すよう修正する */}
-              {adGroup.campaignName}
+              {adGroup.campaign?.name}
             </Grid>
             <Grid item xs={3}>
               月予算
@@ -177,10 +177,10 @@ export function AdGroupView() {
               {" まで"}
             </Grid>
             <Grid item xs={3}>
-              登録済みセグメント数
+              セグメント名
             </Grid>
             <Grid item xs={9}>
-              {/* もし可能なら、ダイアログで登録したセグメントを表示できるようにしたい */}
+              {adGroup.segment?.name}
             </Grid>
             <Grid item xs={3}>
               作成日時

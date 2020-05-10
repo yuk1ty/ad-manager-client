@@ -48,14 +48,17 @@ export interface AdGroupData {
   dailyBudget: number;
   deliveryStartAt: string;
   deliveryEndAt: string;
-  campaignName: string;
-  segments: SegmentData[];
+  campaign: { id: number; name: string } | null;
+  segment: SegmentData | null;
   ads: AdData[];
   createdAt: string;
   updatedAt: string;
 }
 
-export interface SegmentData {}
+export interface SegmentData {
+  name: string;
+  deviceIds: string[];
+}
 
 export interface AdTableData {
   id: number;
@@ -80,7 +83,7 @@ export interface Creative {
 export interface AdData {
   id: number;
   name: string;
-  adGroupName: string;
+  adGroup: { id: number; name: string } | null;
   landingPageUrl: string;
   deliverySwitch: number;
   creative: Creative | null;
