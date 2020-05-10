@@ -103,9 +103,17 @@ export function AdView() {
     } else {
       nextState = 0;
     }
-    await axios(session).patch(`/ads/${id}/delivery-switch`, {
-      switch: nextState,
-    });
+    await axios(session)
+      .patch(`/ads/${id}/delivery-switch`, {
+        switch: nextState,
+      })
+      .then((res) => {
+        setAd(res.data);
+      })
+      .catch((err) => {
+        const res = err.response;
+        setErrors(res.data.errors);
+      });
   }
 
   return (
