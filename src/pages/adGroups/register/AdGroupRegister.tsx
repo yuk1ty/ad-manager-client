@@ -95,7 +95,7 @@ export function AdGroupRegister() {
     await axios(session)
       .post(`/campaigns/${id}/ad-groups`, adGroup)
       .then((res) => {
-        history.goBack();
+        history.push(`/ad-groups/${res.data.id}/view`);
       })
       .catch((err) => {
         const res = err.response;

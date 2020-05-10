@@ -1,4 +1,4 @@
-import React, { useState, SyntheticEvent } from "react";
+import React, { useState, SyntheticEvent, useEffect } from "react";
 import "./AdvertiserRegister.css";
 import { SessionRepository } from "../../../context/session";
 import { useAxios } from "../../../context/axios";
@@ -11,8 +11,14 @@ import {
   createStyles,
   TextField,
   Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
+import { AgencyData } from "../../../context/types";
+import { ErrorAlert } from "../../../components/error/ErrorAlert";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -36,7 +42,10 @@ const useStyles = makeStyles((theme: Theme) =>
 export function AdvertiserRegister() {
   const [name, setName] = useState("");
   const [domain, setDomain] = useState("");
+  const [agencies, setAgencies] = useState<AgencyData[]>([]);
+  const [selectedAgency, setSelectedAgency] = useState<number>(1);
   const repository = SessionRepository();
+  const [errors, setErrors] = useState<string[]>([]);
   const session = repository.session();
   const axios = useAxios;
 
@@ -51,13 +60,29 @@ export function AdvertiserRegister() {
     };
     await axios(session)
       .post("/advertisers", advertiser)
-      .then((res) => history.push(`/advertisers/${res.data.id}/view`));
+      .then((res) => history.push(`/advertisers/${res.data.id}/view`))
+      .catch((err) => {
+        const res = err.response;
+        setErrors(res.data.errors);
+      });
   }
+
+  useEffect(() => {
+    const fetchAgencies = async () => {
+      await axios(session)
+        .get("/agencies")
+        .then((res) => {
+          setAgencies(res.data);
+        });
+    };
+    fetchAgencies();
+  });
 
   return (
     <>
       <Header />
       <StandardLayout title="広告主登録">
+        <ErrorAlert errors={errors} />
         <Paper elevation={3} className="advertiser-register-form">
           <form onSubmit={onSubmit} className={classes.root}>
             <TextField
@@ -76,6 +101,18 @@ export function AdvertiserRegister() {
               size="small"
               onChange={(e) => setDomain(e.target.value)}
             />
+            <FormControl fullWidth>
+              <InputLabel id="select-advertiser">代理店</InputLabel>
+              <Select
+                labelId="select-advertiser"
+                value={selectedAgency}
+                onChange={(e) => setSelectedAgency(e.target.value as number)}
+              >
+                {agencies.map((agency) => (
+                  <MenuItem value={agency.id}>{agency.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
             <Button
               type="submit"
               variant="contained"

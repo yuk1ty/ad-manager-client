@@ -95,7 +95,7 @@ export function AdGroupEdit() {
     await axios(session)
       .patch(`/ad-groups/${id}`, adGroup)
       .then((res) => {
-        history.goBack();
+        history.push(`/ad-groups/${id}/view`);
       })
       .catch((err) => {
         const res = err.response;

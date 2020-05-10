@@ -8,10 +8,6 @@ import {
   createStyles,
   TextField,
   Button,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
 } from "@material-ui/core";
 import { SessionRepository } from "../../../context/session";
 import { useAxios } from "../../../context/axios";
@@ -72,12 +68,7 @@ export function CampaignEdit() {
         });
     };
 
-    const fetchAdvertiserData = async () => {
-      const result = await axios(session).get("/advertisers");
-      setAdvertisers(result.data);
-    };
     fetchCampaign();
-    fetchAdvertiserData();
   }, [id, axios, session]);
 
   async function onSubmit(e: SyntheticEvent) {
@@ -144,20 +135,6 @@ export function CampaignEdit() {
               size="small"
               onChange={(e) => setCharge(+e.target.value)}
             />
-            <FormControl fullWidth>
-              <InputLabel id="select-advertiser">広告主</InputLabel>
-              <Select
-                labelId="select-advertiser"
-                value={selectedAdvertiser}
-                onChange={(e) =>
-                  setSelectedAdvertiser(e.target.value as number)
-                }
-              >
-                {advertisers.map((advertiser) => (
-                  <MenuItem value={advertiser.id}>{advertiser.name}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
             <TextField
               id="delivery-start-at"
               label="配信開始日時"

@@ -12,6 +12,7 @@ import {
   Button,
 } from "@material-ui/core";
 import { useHistory, useParams } from "react-router-dom";
+import { ErrorAlert } from "../../../components/error/ErrorAlert";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -36,6 +37,7 @@ export function AdvertiserEdit() {
   const { id } = useParams();
   const [name, setName] = useState("");
   const [domain, setDomain] = useState("");
+  const [errors, setErrors] = useState<string[]>([]);
   const repository = SessionRepository();
   const session = repository.session();
   const axios = useAxios;
@@ -45,9 +47,16 @@ export function AdvertiserEdit() {
 
   useEffect(() => {
     const fetchAdvertiserData = async () => {
-      const result = (await axios(session).get(`/advertisers/${id}`)).data;
-      setName(result.name);
-      setDomain(result.domain);
+      await axios(session)
+        .get(`/advertisers/${id}`)
+        .then((res) => {
+          setName(res.data.name);
+          setDomain(res.data.domain);
+        })
+        .catch((err) => {
+          const res = err.response;
+          setErrors(res.data.errors);
+        });
     };
     fetchAdvertiserData();
   }, [id, axios, session]);
@@ -67,6 +76,7 @@ export function AdvertiserEdit() {
     <>
       <Header />
       <StandardLayout title="広告主編集">
+        <ErrorAlert errors={errors} />
         <Paper elevation={3} className="advertiser-register-form">
           <form onSubmit={onSubmit} className={classes.root}>
             <TextField

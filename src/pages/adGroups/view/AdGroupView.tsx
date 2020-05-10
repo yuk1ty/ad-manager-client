@@ -56,6 +56,7 @@ export function AdGroupView() {
   const [adGroup, setAdGroup] = useState<AdGroupData>({
     id: 0,
     name: "",
+    campaignName: "",
     monthlyBudget: 0,
     dailyBudget: 0,
     deliveryStartAt: "",
@@ -146,6 +147,13 @@ export function AdGroupView() {
             </Grid>
             <Grid item xs={9}>
               {adGroup.name}
+            </Grid>
+            <Grid item xs={3}>
+              キャンペーン名
+            </Grid>
+            <Grid item xs={9}>
+              {/* campaign.name というように取り出すよう修正する */}
+              {adGroup.campaignName}
             </Grid>
             <Grid item xs={3}>
               月予算

@@ -15,7 +15,7 @@ export interface AdvertiserData {
   id: number;
   name: string;
   domain: string;
-  agencyName: string;
+  agency: AgencyData;
   createdAt: string;
   updatedAt: string;
 }
@@ -30,9 +30,15 @@ export interface CampaignData {
   charge: number;
   deliveryStartAt: string;
   deliveryEndAt: string;
+  advertiser: Advertiser;
   adGroups: AdGroupData[];
   createdAt: string;
   updatedAt: string;
+}
+
+export interface Advertiser {
+  id: number;
+  name: string;
 }
 
 export interface AdGroupData {
@@ -42,6 +48,7 @@ export interface AdGroupData {
   dailyBudget: number;
   deliveryStartAt: string;
   deliveryEndAt: string;
+  campaignName: string;
   segments: SegmentData[];
   ads: AdData[];
   createdAt: string;
@@ -73,6 +80,7 @@ export interface Creative {
 export interface AdData {
   id: number;
   name: string;
+  adGroupName: string;
   landingPageUrl: string;
   deliverySwitch: number;
   creative: Creative | null;

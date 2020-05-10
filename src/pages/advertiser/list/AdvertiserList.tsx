@@ -80,6 +80,7 @@ export function AdvertiserList() {
                 <TableCell>#</TableCell>
                 <TableCell>広告主名</TableCell>
                 <TableCell>ドメイン</TableCell>
+                <TableCell>代理店名</TableCell>
                 <TableCell></TableCell>
               </TableRow>
             </TableHead>
@@ -93,6 +94,7 @@ export function AdvertiserList() {
                     </Link>
                   </TableCell>
                   <TableCell>{advertiser.domain}</TableCell>
+                  <TableCell>{advertiser.agency.name}</TableCell>
                   <TableCell>
                     <TableSideOperations
                       entity={advertiser}

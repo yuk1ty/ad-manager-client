@@ -61,7 +61,7 @@ export function AdvertiserView() {
     id: 0,
     name: "",
     domain: "",
-    agencyName: "",
+    agency: { id: 0, name: "" },
     createdAt: "",
     updatedAt: "",
   });
@@ -144,7 +144,7 @@ export function AdvertiserView() {
               代理店名
             </Grid>
             <Grid item xs={9}>
-              {advertiser.agencyName}
+              {advertiser.agency.name}
             </Grid>
             <Grid item xs={3}>
               作成日時

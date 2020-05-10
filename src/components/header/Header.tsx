@@ -42,7 +42,6 @@ export function Header() {
       })
       .catch(() => {
         // エラーになっても消す
-        console.log("来ない？");
         repository.remove();
         history.push("/login");
       });

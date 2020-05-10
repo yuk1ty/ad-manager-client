@@ -25,6 +25,7 @@ import {
 } from "@material-ui/core";
 import { DeliveryStatusBadge } from "../../../components/badges/DeliveryStatusBadge";
 import { Edit, Delete } from "@material-ui/icons";
+import { ErrorAlert } from "../../../components/error/ErrorAlert";
 
 const userStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -66,10 +67,12 @@ export function CampaignView() {
     charge: 0,
     deliveryStartAt: "",
     deliveryEndAt: "",
+    advertiser: { id: 0, name: "" },
     adGroups: [],
     createdAt: "",
     updatedAt: "",
   });
+  const [errors, setErrors] = useState<string[]>([]);
   const [adGroups, setAdGroups] = useState<AdGroupData[]>([]);
   const repository = SessionRepository();
   const session = repository.session();
@@ -79,9 +82,16 @@ export function CampaignView() {
 
   useEffect(() => {
     const fetchCampaignData = async () => {
-      const result = await axios(session).get(`/campaigns/${id}`);
-      setCampaign(result.data);
-      setAdGroups(result.data.adGroups);
+      await axios(session)
+        .get(`/campaigns/${id}`)
+        .then((res) => {
+          setCampaign(res.data);
+          setAdGroups(res.data.adGroups);
+        })
+        .catch((err) => {
+          const res = err.response;
+          setErrors(res.data.errors);
+        });
     };
     fetchCampaignData();
   }, [id, axios, session]);
@@ -124,13 +134,18 @@ export function CampaignView() {
   async function removeCampaign() {
     await axios(session)
       .delete(`/campaigns/${id}`)
-      .then((res) => history.push("/campaigns/list"));
+      .then((res) => history.push("/campaigns/list"))
+      .catch((err) => {
+        const res = err.response;
+        setErrors(res.data.errors);
+      });
   }
 
   return (
     <>
       <Header />
       <StandardLayout title="キャンペーン詳細">
+        <ErrorAlert errors={errors} />
         <Box className={classes.absolute} component="div">
           <Tooltip title="編集" aria-label="add">
             <Fab
@@ -202,6 +217,12 @@ export function CampaignView() {
             </Grid>
             <Grid item xs={9}>
               {campaign.name}
+            </Grid>
+            <Grid item xs={3}>
+              広告主名
+            </Grid>
+            <Grid item xs={9}>
+              {campaign.advertiser.name}
             </Grid>
             <Grid item xs={3}>
               配信ステータス
