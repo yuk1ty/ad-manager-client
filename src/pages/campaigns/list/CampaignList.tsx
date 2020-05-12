@@ -29,8 +29,15 @@ export function CampaignList() {
 
   useEffect(() => {
     const fetchTableData = async () => {
-      const result = await axios(session).get("/campaigns");
-      setCampaigns(result.data);
+      await axios(session)
+        .get("/campaigns")
+        .then((res) => {
+          setCampaigns(res.data);
+        })
+        .catch((err) => {
+          const res = err.response;
+          setErrors(res.data.errors);
+        });
     };
     fetchTableData();
   }, [axios, session]);
