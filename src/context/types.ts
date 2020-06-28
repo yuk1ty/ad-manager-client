@@ -90,3 +90,12 @@ export interface AdData {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface ErrorResp {
+  response?: {
+    data: {
+      errors: string[];
+    };
+  };
+  message: string;
+}

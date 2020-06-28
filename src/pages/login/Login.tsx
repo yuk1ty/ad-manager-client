@@ -14,11 +14,7 @@ import { useCookies } from "react-cookie";
 import { useAxios } from "../../context/axios";
 import { LockOutlined } from "@material-ui/icons";
 import Alert from "@material-ui/lab/Alert";
-
-interface LoginForm {
-  userId: string;
-  password: string;
-}
+import { ErrorResp } from "../../context/types";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -53,8 +49,9 @@ export function Login() {
 
   const axios = useAxios();
 
-  const doLogin = async (e: SyntheticEvent) => {
-    await axios
+  const doLogin = (e: SyntheticEvent) => {
+    e.preventDefault();
+    axios
       .post("/sessions", {
         userId: userId,
         password: password,
@@ -63,9 +60,8 @@ export function Login() {
         setCookie("x-adm-session", res.data.session);
         history.push("/");
       })
-      .catch((err) => {
-        const res = err.response;
-        setErrors(res.data.errors);
+      .catch((err: ErrorResp) => {
+        setErrors(err.response?.data.errors || [err.message]);
       });
   };
 
